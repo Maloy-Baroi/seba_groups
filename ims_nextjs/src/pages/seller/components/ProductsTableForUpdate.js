@@ -1,7 +1,7 @@
+import {useEffect, useState} from "react";
 import productsTableStyle from "@/styles/productTable.module.css";
-import {useState, useEffect} from "react";
 
-const ProductsTable = ({ searchValue, onHandleCartLength }) => {
+const ProductsTableForUpdate = ({searchValue, onStartUpdate}) => {
     const [products, setProducts] = useState([]);
 
     const searchOption = () => {
@@ -12,8 +12,7 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
     useEffect(() => {
         if (searchValue) {
             searchOption()
-        }
-        else {
+        } else {
             var myHeaders = new Headers();
             myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
 
@@ -30,24 +29,11 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
                     setProducts(result)
                 })
                 .catch(error => console.log('error', error));
-
         }
     }, [searchValue])
 
     const onHandle = (id) => {
-        let quantity = parseInt(prompt("Quantity?: "));
-        const sellcard = JSON.parse(localStorage.getItem('sellcard') || '[]');
-        const item = {id, quantity};
-        const existProduct = sellcard.find(product => product.id === id)
-        if (existProduct) {
-            existProduct.quantity = parseInt(existProduct.quantity) + quantity;
-            localStorage.setItem('sellcard', JSON.stringify(sellcard))
-        }
-        else {
-            sellcard.push(item);
-            localStorage.setItem('sellcard', JSON.stringify(sellcard));
-        }
-        onHandleCartLength()
+        onHandleUpdate()
     }
 
     return (
@@ -67,7 +53,7 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
                                 <th scope="col">Shelf</th>
                                 <th scope="col">Expiry Date</th>
                                 <th scope="col">Price</th>
-                                <th scope="col">Sell</th>
+                                <th scope="col">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -96,10 +82,10 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
                                             &#2547; {item.minimum_selling_price}
                                         </b>
                                     </td>
-                                    <td data-label="Sell">
+                                    <td data-label="Action">
                                         <div>
                                             <button className={productsTableStyle.AddToSellBtn}
-                                                    onClick={() => onHandle(item.id, item.quantity)}>Add to Sell
+                                                    onClick={() => onStartUpdate(item.name, item.quantity, item.minimum_alert_quantity, item.minimum_selling_price, item.bought_price, item.status)}>Update
                                             </button>
                                         </div>
                                     </td>
@@ -114,4 +100,4 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
     );
 }
 
-export default ProductsTable;
+export default ProductsTableForUpdate;

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Category, SubCategory, Brand, Shelf, ProductModel
+import re
 
 
 # Category Serializer
@@ -47,10 +48,19 @@ class ProductModelSerializer(serializers.ModelSerializer):
         brand_name = validated_data.pop('get_brand')
         shelf_number = validated_data.pop('get_shelf')
 
-        my_shelf = shelf_number.split(", ")
-        shelf_no = my_shelf[0]
-        row_no = my_shelf[1]
-        column_no = my_shelf[2]
+        print(shelf_number)
+
+        shelf_pattern = r"Shelf:\s+(\d+)"
+        row_pattern = r"Row:\s+(\d+)"
+        column_pattern = r"Column:\s+(\d+)"
+
+        shelf_no = re.search(shelf_pattern, shelf_number).group(1)
+        row_no = re.search(row_pattern, shelf_number).group(1)
+        column_no = re.search(column_pattern, shelf_number).group(1)
+
+        print(f"Shelf number: {shelf_no}")
+        print(f"Row number: {row_no}")
+        print(f"Column number: {column_no}")
 
         category = Category.objects.get(name=category_name)
         sub_category = SubCategory.objects.get(name=sub_category_name)

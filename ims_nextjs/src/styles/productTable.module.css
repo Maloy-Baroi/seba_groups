@@ -24,6 +24,9 @@
     font-size: 13.5px !important;
     font-weight: 400;
     height: 67px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .table th,
@@ -45,15 +48,15 @@
 
 .AddToSellBtn {
     width: 100px !important;
-    height: 30px !important;
+    height: 35px !important;
     background-color: transparent;
-    border: 1px solid #198754;
+    border: 1px solid #FF9F43;
     border-radius: 5px;
     font-size: 13px;
 }
 
 .AddToSellBtn:hover {
-    background-color: #198754;
+    background-color: #FF9F43;
     color: white;
 }
 
@@ -105,4 +108,12 @@
     .table td:last-child {
         border-bottom: 0;
     }
+}
+
+.itemName {
+    font-size: 14px;
+}
+.brandName {
+    font-size: 12px;
+    font-weight: normal;
 }

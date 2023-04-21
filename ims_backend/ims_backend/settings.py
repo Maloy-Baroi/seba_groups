@@ -90,12 +90,8 @@ WSGI_APPLICATION = 'ims_backend.wsgi.application'
 if DEBUG:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'ims_db_demo',  # Replace with your MySQL database name
-            'USER': 'root',  # Replace with your MySQL database user
-            'PASSWORD': '1Haveadream',  # Replace with your MySQL database password
-            'HOST': 'localhost',  # Replace with your MySQL database host (e.g. 'localhost' or '127.0.0.1')
-            'PORT': '3306',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 else:

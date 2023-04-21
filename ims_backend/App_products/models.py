@@ -37,7 +37,7 @@ class ProductModel(models.Model):
     product_id = models.PositiveBigIntegerField(unique=True)
     name = models.CharField(max_length=255)
     description = models.TextField()
-    bought_price = models.DecimalField(max_digits=10, decimal_places=2)
+    bought_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     minimum_selling_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField()
     type = models.CharField(max_length=255, default="Tablet")
@@ -45,7 +45,7 @@ class ProductModel(models.Model):
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='sub_category_name')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='brand_name')
     shelf = models.ForeignKey(Shelf, on_delete=models.CASCADE, related_name='shelf_number', blank=True, null=True)
-    unit = models.CharField(max_length=255)
+    unit = models.CharField(max_length=255)  # Strength
     minimum_alert_quantity = models.PositiveIntegerField()
     expiry_date = models.DateField()
     status = models.BooleanField(default=True)

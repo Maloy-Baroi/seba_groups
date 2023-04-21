@@ -27,3 +27,6 @@ export async function getBrandList() {
     return await callApi('api-product/brand/');
 }
 
+export async function getShelfList() {
+    return await callApi('api-product/all-shelf/');
+}

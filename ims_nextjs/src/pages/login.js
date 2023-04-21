@@ -61,7 +61,7 @@ const login = () => {
                 console.log(result['group'])
 
                 if ((result['access'] != null)) {
-                    if (result['group'] === 'salesman') {
+                    if (result['group'] === 'seller') {
                         localStorage.setItem("access_token", result['access'])
                         localStorage.setItem("group", result['group'])
                         localStorage.setItem("auth", true)

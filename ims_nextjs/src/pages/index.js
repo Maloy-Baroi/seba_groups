@@ -17,7 +17,7 @@ export default function Home() {
         const access_token = localStorage.getItem("access_token");
         const group = localStorage.getItem("group");
         if (access_token) {
-            if (group === "salesman") {
+            if (group === "seller") {
                 navigator.push('/seller/dashboard')
             }
             else if (group === "shopmanager") {
