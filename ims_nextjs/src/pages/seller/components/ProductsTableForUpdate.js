@@ -85,7 +85,7 @@ const ProductsTableForUpdate = ({searchValue, onStartUpdate}) => {
                                     <td data-label="Action">
                                         <div>
                                             <button className={productsTableStyle.AddToSellBtn}
-                                                    onClick={() => onStartUpdate(item.name, item.quantity, item.minimum_alert_quantity, item.minimum_selling_price, item.bought_price, item.status)}>Update
+                                                    onClick={() => onStartUpdate(item.id, item.name, item.quantity, item.minimum_alert_quantity, item.minimum_selling_price, item.bought_price, item.status)}>Update
                                             </button>
                                         </div>
                                     </td>

@@ -5,6 +5,7 @@ app_name = "App_products"
 
 urlpatterns = [
     path('products/', ProductAPIView.as_view(), name="product-list"),
+    path('update-product/<int:pk>/', productUpdateAPIView, name="product-update"),
     path('almost-expiry-products/', AlMostExpiryProductsAPIView.as_view(), name="almost-expiry-product-list"),
     path('expired-products/', ExpiredProductsAPIView.as_view(), name="expired-product-list"),
     path('categories/', CategoryListAPIView.as_view(), name="categories"),
