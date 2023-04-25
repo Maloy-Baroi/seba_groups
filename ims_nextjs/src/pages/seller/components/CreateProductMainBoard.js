@@ -1,8 +1,5 @@
 import MainboardHead from "@/pages/seller/components/MainboardHead";
 import productStyle from "@/styles/productsPage.module.css";
-import Image from "next/image";
-import uploadIcon from "@/assets/icons/upload.svg";
-import ProductsTable from "@/pages/seller/components/ProductsTable";
 import CreateProductForm from "@/pages/seller/components/CreateProductForm";
 
 const CreateProductMainBoard = () => {

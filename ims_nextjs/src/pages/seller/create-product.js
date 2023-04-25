@@ -3,13 +3,12 @@ import DashboardNavbar from "@/pages/seller/components/DashboardNavbar";
 import dashboardStyle from "@/styles/dashboard.module.css";
 import Sidebar from "@/pages/seller/components/Sidebar";
 import CreateProductMainBoard from "@/pages/seller/components/CreateProductMainBoard";
+import OnlyHead from "@/pages/seller/components/OnlyHead";
 
 const CreateProduct = () => {
   return (
       <>
-          <Head>
-              <title>Seba Pharmacy | Seller | Create New Products</title>
-          </Head>
+          <OnlyHead page={"Create New Products"} />
           <main>
               <DashboardNavbar />
               <div className={"row w-100"}>

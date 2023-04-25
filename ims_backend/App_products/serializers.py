@@ -78,22 +78,7 @@ class ProductModelSerializer(serializers.ModelSerializer):
         return product_model
 
     def update(self, instance, validated_data):
-        category_data = validated_data.pop('category', None)
-        sub_category_data = validated_data.pop('sub_category', None)
-        brand_data = validated_data.pop('brand', None)
         shelf_data = validated_data.pop('shelf', None)
-
-        if category_data:
-            category = Category.objects.create(**category_data)
-            instance.category = category
-
-        if sub_category_data:
-            sub_category = SubCategory.objects.create(**sub_category_data)
-            instance.sub_category = sub_category
-
-        if brand_data:
-            brand = Brand.objects.create(**brand_data)
-            instance.brand = brand
 
         if shelf_data:
             shelf = Shelf.objects.create(**shelf_data)

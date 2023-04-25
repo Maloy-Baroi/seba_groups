@@ -22,6 +22,7 @@ const CreateProductForm = () => {
     const [description_, setDescription] = useState("")
     const [status, setStatus] = useState(true)
     const [categories, setCategories] = useState([])
+    const [productNames, setProductNames] = useState([])
     const [subCategories, setSubCategories] = useState([])
     const [allBrand, setBrand] = useState([])
     const [allShelf, setAllShelf] = useState([])
@@ -30,6 +31,13 @@ const CreateProductForm = () => {
     const [brandSearchText, setBrandSearchText] = useState("");
 
     useEffect(() => {
+
+        const fetchProductNames = async () => {
+            // eslint-disable-next-line @next/next/no-assign-module-variable
+            const module = await import("../../../assets/medicines.json");
+            setProductNames(module.default);
+        };
+
         const fetchCategories = async () => {
             const allCategories = await getCategoryList();
             setCategories(allCategories);
@@ -50,6 +58,7 @@ const CreateProductForm = () => {
             setAllShelf(allShelves);
         }
 
+        fetchProductNames().then(r => true);
         fetchCategories().then(r => true);
         fetchSubCategories().then(r => true);
         fetchBrands().then(r => true);
@@ -57,6 +66,10 @@ const CreateProductForm = () => {
             console.log(allShelf)
         });
     }, []);
+
+    const filteredProductName = productNames.filter((prod) => {
+        return prod.product_name.toLowerCase().startsWith(p_name.toLowerCase());
+    });
 
     const filteredCategories = categories.filter((category) => {
         return category.name.toLowerCase().startsWith(categorySearchText.toLowerCase());
@@ -70,6 +83,24 @@ const CreateProductForm = () => {
         return category.name.toLowerCase().startsWith(brandSearchText.toLowerCase());
     });
 
+    const handleProductNameInputChange = (event) => {
+        let prodName = document.getElementById("productNamesID")
+        prodName.style.display = "block";
+        setPName(event.target.value);
+        let specialisedForID = document.getElementById("specialisedForID")
+        p_name.length > 0 ? specialisedForID.style.display = "block" : specialisedForID.style.display = "none"
+    }
+
+    const handleProductNameSelect = (productName, productStrength, productType, productGen, productCom) => {
+        setPName(productName);
+        setStrength(productStrength);
+        setPType(productType);
+        setCategorySearchText(productGen);
+        setBrandSearchText(productCom);
+        let prodName = document.getElementById("productNamesID")
+        prodName.style.display = "none";
+    }
+
     const handleCategoryInputChange = (event) => {
         let generics = document.getElementById("genericID")
         generics.style.display = "block";
@@ -81,6 +112,7 @@ const CreateProductForm = () => {
         let generics = document.getElementById("genericID")
         generics.style.display = "none";
     }
+
 
     const handleSubCategoryInputChange = (event) => {
         let specialisedForID = document.getElementById("specialisedForID")
@@ -139,6 +171,9 @@ const CreateProductForm = () => {
             .catch(error => console.error(error))
     }
 
+    const shouldDisplaySpecialisedForID = () => {
+    }
+
     return (
         <>
             <div className="card">
@@ -147,8 +182,29 @@ const CreateProductForm = () => {
                         <div className={"col-md-3"}>
                             <div className={"form-group " + productFormStyle.formGroup}>
                                 <label>Product Name*</label>
-                                <input type={"text"} className={"form-control"} placeholder={"Product Name"}
-                                       value={p_name} onChange={e => setPName(e.target.value)}/>
+                                <input type={"text"} className={"form-control"}
+                                       value={
+                                           p_name ?
+                                               p_name :
+                                               shouldDisplaySpecialisedForID()
+                                       }
+                                       onChange={handleProductNameInputChange} placeholder={"Product Name"}/>
+                                <ul id={"productNamesID"} style={
+                                    p_name.length > 0 ?
+                                        {display: "block", height: "200px", overflow: "scroll"} :
+                                        {display: "none"}
+                                }
+                                >
+                                    {filteredProductName.map((prodName) => (
+                                        <li key={prodName.id}
+                                            onClick={() => handleProductNameSelect(prodName.product_name, prodName.strength, prodName.type, prodName.generics, prodName.company)}
+                                            style={{
+                                                cursor: "pointer"
+                                            }}>
+                                            {prodName.product_name} ({prodName.strength})
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                         <div className={"col-md-3"}>
@@ -260,23 +316,26 @@ const CreateProductForm = () => {
                         <div className={"col-lg-3 col-md-3 col-sm-6"}>
                             <div className={"form-group " + productFormStyle.formGroup}>
                                 <label>Minimum Selling Price*</label>
-                                <input type={"number"} className={"form-control"} placeholder={"Price"}
+                                <input type={"number"} className={"form-control"} placeholder={"Price"} min={"0.25"}
+                                       step={"0.01"}
                                        value={minimumPrice.toString()}
-                                       onChange={e => setMinimumPrice(parseInt(e.target.value))}/>
+                                       onChange={e => setMinimumPrice(parseFloat(e.target.value))}/>
                             </div>
                         </div>
                         <div className={"col-lg-3 col-md-3 col-sm-6"}>
                             <div className={"form-group " + productFormStyle.formGroup}>
                                 <label>Buying Price*</label>
-                                <input type={"number"} className={"form-control"} placeholder={"Price"}
+                                <input type={"number"} className={"form-control"} placeholder={"Price"} min={"0.25"}
+                                       step={"0.01"}
                                        value={buyingPrice.toString()}
-                                       onChange={e => setBuyingPrice(parseInt(e.target.value))}/>
+                                       onChange={e => setBuyingPrice(parseFloat(e.target.value))}/>
                             </div>
                         </div>
                         <div className={"col-lg-3 col-md-3 col-sm-6"}>
                             <div className={"form-group " + productFormStyle.formGroup}>
                                 <label>Expiry Date*</label>
-                                <input type="date" className={"form-control"} value={expiry_date} onChange={(event) => setExpiryDate(event.target.value)} />
+                                <input type="date" className={"form-control"} value={expiry_date}
+                                       onChange={(event) => setExpiryDate(event.target.value)}/>
 
                             </div>
                         </div>

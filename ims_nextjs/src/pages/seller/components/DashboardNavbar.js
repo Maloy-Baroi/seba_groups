@@ -26,7 +26,7 @@ const DashboardNavbar = () => {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className={"nav-item " + navStyle.navItem}>
-                                <Link className="nav-link active" aria-current="page" href={"/"}>
+                                <Link className="nav-link active" aria-current="page" href={"/seller/selling-box/"}>
                                     <i className={"fa fa-shopping-cart"}>
                                         <sup className={"m-1 " + navStyle.supText}>
                                             {cartLength}

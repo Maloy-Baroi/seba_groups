@@ -4,6 +4,7 @@ import Sidebar from "@/pages/seller/components/Sidebar";
 import dashboardStyle from "@/styles/dashboard.module.css";
 import ProductsMainBoard from "@/pages/seller/components/ProductsMainBoard";
 import {useEffect, useState} from "react";
+import OnlyHead from "@/pages/seller/components/OnlyHead";
 
 const Products = () => {
     const [cartLength, setCartLength] = useState(0);
@@ -18,9 +19,7 @@ const Products = () => {
 
     return (
         <>
-            <Head>
-                <title>Seba Pharmacy | Seller | Products</title>
-            </Head>
+            <OnlyHead page={"Products"} />
             <main>
                 <DashboardNavbar />
                 <div className={"row w-100"}>

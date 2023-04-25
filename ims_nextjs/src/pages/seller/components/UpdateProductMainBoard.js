@@ -6,7 +6,7 @@ const UpdateProductMainBoard = () => {
     return (
         <>
             <div className={"row"}>
-                <MainboardHead h4Text={"Product Add"} h6Text={"Create new product"}/>
+                <MainboardHead h4Text={"Product Update"} h6Text={"Update product stock"}/>
             </div>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>

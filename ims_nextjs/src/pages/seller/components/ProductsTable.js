@@ -1,7 +1,7 @@
 import productsTableStyle from "@/styles/productTable.module.css";
 import {useState, useEffect} from "react";
 
-const ProductsTable = ({ searchValue, onHandleCartLength }) => {
+const ProductsTable = ({searchValue, onHandleCartLength}) => {
     const [products, setProducts] = useState([]);
 
     const searchOption = () => {
@@ -12,8 +12,7 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
     useEffect(() => {
         if (searchValue) {
             searchOption()
-        }
-        else {
+        } else {
             var myHeaders = new Headers();
             myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
 
@@ -26,26 +25,37 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
             fetch("http://127.0.0.1:8000/api-product/products/", requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result)
                     setProducts(result)
                 })
                 .catch(error => console.log('error', error));
-
         }
     }, [searchValue])
 
-    const onHandle = (id) => {
+    const onHandle = (id, thisProductName, thisProductUnit, thisProductPrice) => {
         let quantity = parseInt(prompt("Quantity?: "));
+        const selectedProduct = products.find((product) => product.id === id);
         const sellcard = JSON.parse(localStorage.getItem('sellcard') || '[]');
-        const item = {id, quantity};
+        let existingQuantity = selectedProduct['quantity'] - quantity
+        const item = {id, thisProductName, thisProductUnit, thisProductPrice, existingQuantity, quantity};
         const existProduct = sellcard.find(product => product.id === id)
         if (existProduct) {
-            existProduct.quantity = parseInt(existProduct.quantity) + quantity;
-            localStorage.setItem('sellcard', JSON.stringify(sellcard))
-        }
-        else {
-            sellcard.push(item);
-            localStorage.setItem('sellcard', JSON.stringify(sellcard));
+            if (existingQuantity<0 || parseInt(existProduct.quantity) < quantity || selectedProduct['quantity'] < parseInt(existProduct.quantity)+quantity) {
+                alert("Not enough quantity available!")
+                return;
+            }
+            else {
+                existProduct.quantity = parseInt(existProduct.quantity) + quantity;
+                localStorage.setItem('sellcard', JSON.stringify(sellcard))
+            }
+        } else {
+            if (existingQuantity<0) {
+                alert("Not enough quantity available!")
+                return;
+            }
+            else {
+                sellcard.push(item);
+                localStorage.setItem('sellcard', JSON.stringify(sellcard));
+            }
         }
         onHandleCartLength()
     }
@@ -76,7 +86,9 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
                                     <td data-label="Name">
                                         <p className={productsTableStyle.itemName}>{item.name} </p>
                                         <p>({item.unit})</p>
-                                        <p className={productsTableStyle.brandName}>({item.brand})</p>
+                                        <p className={productsTableStyle.brandName}>
+                                            ({item.brand})
+                                        </p>
                                     </td>
                                     <td data-label="Generic" style={{
                                         width: "148px",
@@ -99,7 +111,7 @@ const ProductsTable = ({ searchValue, onHandleCartLength }) => {
                                     <td data-label="Sell">
                                         <div>
                                             <button className={productsTableStyle.AddToSellBtn}
-                                                    onClick={() => onHandle(item.id, item.quantity)}>Add to Sell
+                                                    onClick={() => onHandle(item.id, item.name, item.unit, item.minimum_selling_price, item.quantity)}>Add to Sell
                                             </button>
                                         </div>
                                     </td>

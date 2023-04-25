@@ -1,4 +1,6 @@
+import json
 from datetime import datetime, timedelta
+import re
 
 from django.shortcuts import render
 from rest_framework import generics, status
@@ -29,19 +31,53 @@ class ProductAPIView(generics.ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ImportProductsAPIView(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    queryset = ProductModel.objects.all()
+    serializer_class = ProductModelSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(imported=True).exclude(expiry_date__lte=datetime.today().date())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def productUpdateAPIView(request, pk):
     try:
         product_object = ProductModel.objects.get(pk=pk)
-    except MyObject.DoesNotExist:
+    except product_object.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = ProductModelSerializer(product_object, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    shelf_number = request.data['shelf']
+
+    shelf_pattern = r"Shelf:\s+(\d+)"
+    row_pattern = r"Row:\s+(\d+)"
+    column_pattern = r"Column:\s+(\d+)"
+
+    shelf_no = re.search(shelf_pattern, shelf_number).group(1)
+    row_no = re.search(row_pattern, shelf_number).group(1)
+    column_no = re.search(column_pattern, shelf_number).group(1)
+
+    print(f"Shelf number: {shelf_no}")
+    print(f"Row number: {row_no}")
+    print(f"Column number: {column_no}")
+
+    my_shelf = Shelf.objects.get(number=shelf_no, row=row_no, column=column_no)
+
+    product_object.bought_price = request.data['bought_price']
+    product_object.minimum_selling_price = request.data['minimum_selling_price']
+    product_object.quantity = request.data['quantity']
+    product_object.shelf = my_shelf
+    product_object.minimum_alert_quantity = request.data['minimum_alert_quantity']
+    product_object.expiry_date = request.data['expiry_date']
+
+    product_object.save()
+
+    return Response({
+        'success': f"`{product_object.name}` is successfully updated",
+    }, status=status.HTTP_200_OK)
 
 
 class AlMostExpiryProductsAPIView(generics.ListCreateAPIView):

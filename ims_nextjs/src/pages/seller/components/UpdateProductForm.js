@@ -39,7 +39,6 @@ const UpdateProductForm = () => {
         e.preventDefault()
 
         const requestBody = {
-            name: product_name,
             quantity: quantity,
             minimum_alert_quantity: alertQuantity,
             minimum_selling_price: sellingPrice,
@@ -49,7 +48,7 @@ const UpdateProductForm = () => {
         }
 
         fetch(`http://127.0.0.1:8000/api-product/update-product/${productId}/`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem("access_token")}`
@@ -64,6 +63,19 @@ const UpdateProductForm = () => {
     const fetchShelves = async () => {
         const allShelves = await getShelfList()
         setAllShelf(allShelves);
+    }
+
+    const onHandleCloseUpdateForm = (e) => {
+        e.preventDefault()
+        document.getElementById('updateFormCard').style.display = "none";
+        setProductId("")
+        setProductName("")
+        setQuantity("")
+        setAlertQuantity("")
+        setSellingPrice("")
+        setBuyingPrice("")
+        setShelfNumber("")
+        setProductExpiryDate("")
     }
 
     useEffect(() => {
@@ -81,14 +93,16 @@ const UpdateProductForm = () => {
                                 <div className={"col-md-11"}>
                                     <legend className={"text-center"}>
                                         Update Product Information
-                                        <br />
-                                        <small>
-                                            {product_name}
+                                        <small style={{
+                                            fontSize: "13px"
+                                        }}>
+                                            ({product_name})
                                         </small>
                                     </legend>
                                 </div>
                                 <div className={"col-md-1"}>
-                                    <button className={"btn btn-danger w-100"}>
+                                    <button type={"button"} className={"btn btn-danger w-100"}
+                                            onClick={e => onHandleCloseUpdateForm(e)}>
                                         <i className={"fa fa-close"}></i>
                                     </button>
                                 </div>
@@ -117,7 +131,7 @@ const UpdateProductForm = () => {
                                 </div>
                                 <div className={"col-md-4 mb-2 mt-2"}>
                                     <div className={"form-group"}>
-                                        <label>Product Name</label>
+                                        <label>Shelf Number</label>
                                         <select className={"form-control"} value={shelfNumber}
                                                 onChange={e => setShelfNumber(e.target.value)}>
                                             <option>select shelf</option>
