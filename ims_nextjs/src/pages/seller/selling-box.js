@@ -7,9 +7,20 @@ import {useEffect, useState} from "react";
 
 const SellingBox = () => {
     const [boxProduct, setBoxProduct] = useState([])
+    const [totalPrice, setTotalPrice] = useState(0)
+
     const takeCartData = () => {
         const sellCard = JSON.parse(localStorage.getItem('sellcard') || '[]');
         setBoxProduct(sellCard)
+    }
+
+    const getTotalPrice = () => {
+        const sellCard = JSON.parse(localStorage.getItem('sellcard') || '[]');
+        let total = 0;
+        for (let i = 0; i < sellCard.length; i++) {
+            total += sellCard[i]['quantity'] * sellCard[i]['thisProductPrice'];
+        }
+        setTotalPrice(total)
     }
 
     const handleAddQuantity = (id) => {
@@ -22,6 +33,7 @@ const SellingBox = () => {
         });
         setBoxProduct(updatedBoxProduct);
         localStorage.setItem('sellcard', JSON.stringify(updatedBoxProduct));
+        getTotalPrice()
     };
 
 
@@ -38,11 +50,48 @@ const SellingBox = () => {
         // Update the localStorage value
         const updatedCart = JSON.stringify(updatedItems);
         localStorage.setItem('sellcard', updatedCart);
+        getTotalPrice()
     };
+
+    const handleSellSubmission = async (customerName, customerPhn) => {
+        // e.preventDefault();
+
+        let prod_n_qty = `{
+            "id": ${localStorage.getItem("sellcard")['id']},
+            "qty": ${localStorage.getItem("sellcard")['quantity']}
+        }`
+        console.log(localStorage.getItem("sellcard"))
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api-seller/orders/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+                },
+                body: JSON.stringify({
+                    "products_n_quantity": prod_n_qty,
+                    "customerName": customerName,
+                    "phone_number": customerPhn,
+                    "totalPrice": totalPrice,
+                    "access_token": localStorage.getItem('access_token')
+                }),
+            });
+
+            if (response.ok) {
+                localStorage.removeItem("sellcard")
+                
+            } else {
+                console.log("something wrong!")
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
 
     useEffect(() => {
         takeCartData();
+        getTotalPrice();
     }, [])
 
     return (
@@ -59,7 +108,10 @@ const SellingBox = () => {
                     }}>
                         <div className={dashboardStyle.content}>
                             <SellingBoxMainBoard boxItems={boxProduct} handleMinusQuantity={handleMinusQuantity}
-                                                 handleAddQuantity={handleAddQuantity}/>
+                                                 handleAddQuantity={handleAddQuantity}
+                                                 handleSellSubmission={handleSellSubmission}
+                                                 totalPrice={totalPrice}
+                            />
                         </div>
                     </div>
                 </div>

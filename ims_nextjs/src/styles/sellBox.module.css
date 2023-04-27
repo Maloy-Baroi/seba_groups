@@ -45,3 +45,8 @@
 .tabRow:hover {
     background-color: rgba(173, 255, 47, 0.48);
 }
+
+.totalContainer p {
+    font-weight: 700;
+    color: #dc3545;
+}

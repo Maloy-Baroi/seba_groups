@@ -24,11 +24,6 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
 class OrderModelSerializer(serializers.ModelSerializer):
     customer = CustomerProfileSerializer()
-    total_price = serializers.SerializerMethodField()
-
     class Meta:
         model = OrderModel
         fields = ['id', 'products_n_quantity', 'seller', 'customer', 'total_price']
-
-    def get_total_price(self, obj):
-        return obj.get_total()

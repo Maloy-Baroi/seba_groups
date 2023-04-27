@@ -36,17 +36,8 @@ class CustomerProfile(models.Model):
 
 class OrderModel(models.Model):
     products_n_quantity = models.JSONField()
-    seller = models.ForeignKey(SalesmanProfile, on_delete=models.DO_NOTHING, related_name="seller_name")
+    seller = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, related_name="seller_name")
     customer = models.ForeignKey(CustomerProfile, on_delete=models.DO_NOTHING, related_name="customer_name")
+    totalPrice = models.FloatField(default=1)
 
-    def get_total(self):
-        product_ids = [item["product_id"] for item in self.products_n_quantity]
-        products = ProductModel.objects.filter(product_id__in=product_ids)
-        product_quantities = {item["product_id"]: item["quantity"] for item in self.products_n_quantity}
-        total_price = 0
-        for product in products:
-            quantity = product_quantities[product.product_id]
-            price = product.minimum_selling_price
-            total_price += quantity * price
-        return total_price
 
