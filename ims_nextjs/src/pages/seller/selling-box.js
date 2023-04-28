@@ -4,14 +4,31 @@ import dashboardStyle from "@/styles/dashboard.module.css";
 import Sidebar from "@/pages/seller/components/Sidebar";
 import SellingBoxMainBoard from "@/pages/seller/components/SellingBoxMainBoard";
 import {useEffect, useState} from "react";
+import {useRouter} from "next/router";
 
 const SellingBox = () => {
     const [boxProduct, setBoxProduct] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
 
+    const navigator = useRouter()
+
     const takeCartData = () => {
-        const sellCard = JSON.parse(localStorage.getItem('sellcard') || '[]');
-        setBoxProduct(sellCard)
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api-seller/cart-list/", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                setBoxProduct(result)
+            })
+            .catch(error => console.log('error', error));
     }
 
     const getTotalPrice = () => {
@@ -56,11 +73,15 @@ const SellingBox = () => {
     const handleSellSubmission = async (customerName, customerPhn) => {
         // e.preventDefault();
 
-        let prod_n_qty = `{
-            "id": ${localStorage.getItem("sellcard")['id']},
-            "qty": ${localStorage.getItem("sellcard")['quantity']}
-        }`
-        console.log(localStorage.getItem("sellcard"))
+        const sellCard = JSON.parse(localStorage.getItem('sellcard') || '[]');
+        let prod_n_qty = [];
+        sellCard.map(item => {
+            prod_n_qty.push({
+                id: item.id,
+                quantity: item.quantity
+            })
+        })
+        console.log(prod_n_qty)
         try {
             const response = await fetch('http://127.0.0.1:8000/api-seller/orders/', {
                 method: 'POST',
@@ -79,7 +100,8 @@ const SellingBox = () => {
 
             if (response.ok) {
                 localStorage.removeItem("sellcard")
-                
+
+                await navigator.push('/seller/products/')
             } else {
                 console.log("something wrong!")
             }
@@ -101,7 +123,7 @@ const SellingBox = () => {
                 <DashboardNavbar/>
                 <div className={"row w-100"}>
                     <div className={"col-md-2 " + dashboardStyle.sidebarContainer}>
-                        <Sidebar activeState={"category"}/>
+                        <Sidebar/>
                     </div>
                     <div className={"col-md-10"} style={{
                         backgroundColor: "#f8f8f8"

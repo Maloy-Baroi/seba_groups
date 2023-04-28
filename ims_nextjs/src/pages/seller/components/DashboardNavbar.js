@@ -5,8 +5,21 @@ import {useEffect, useState} from "react";
 const DashboardNavbar = () => {
     const [cartLength, setCartLength] = useState(0);
     const onHandleCartLength = () => {
-        const sellcart = JSON.parse(localStorage.getItem('sellcard') || '[]');
-        setCartLength(sellcart.length);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api-seller/cart-list/", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                setCartLength(result.length)
+            })
+            .catch(error => console.log('error', error));
     }
 
     useEffect(() => {

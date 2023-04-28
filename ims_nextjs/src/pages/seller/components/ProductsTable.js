@@ -31,33 +31,25 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
         }
     }, [searchValue])
 
-    const onHandle = (id, thisProductName, thisProductUnit, thisProductPrice) => {
-        let quantity = parseInt(prompt("Quantity?: "));
-        const selectedProduct = products.find((product) => product.id === id);
-        const sellcard = JSON.parse(localStorage.getItem('sellcard') || '[]');
-        let existingQuantity = selectedProduct['quantity'] - quantity
-        const item = {id, thisProductName, thisProductUnit, thisProductPrice, existingQuantity, quantity};
-        const existProduct = sellcard.find(product => product.id === id)
-        if (existProduct) {
-            if (existingQuantity<0 || parseInt(existProduct.quantity) < quantity || selectedProduct['quantity'] < parseInt(existProduct.quantity)+quantity) {
-                alert("Not enough quantity available!")
-                return;
-            }
-            else {
-                existProduct.quantity = parseInt(existProduct.quantity) + quantity;
-                localStorage.setItem('sellcard', JSON.stringify(sellcard))
-            }
-        } else {
-            if (existingQuantity<0) {
-                alert("Not enough quantity available!")
-                return;
-            }
-            else {
-                sellcard.push(item);
-                localStorage.setItem('sellcard', JSON.stringify(sellcard));
-            }
-        }
-        onHandleCartLength()
+    const onHandle = (id) => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
+
+        var formdata = new FormData();
+        formdata.append("product_id", id);
+        formdata.append("quantity", "1");
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api-seller/cart/", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
     }
 
     return (
@@ -111,7 +103,7 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                                     <td data-label="Sell">
                                         <div>
                                             <button className={productsTableStyle.AddToSellBtn}
-                                                    onClick={() => onHandle(item.id, item.name, item.unit, item.minimum_selling_price, item.quantity)}>Add to Sell
+                                                    onClick={() => onHandle(item.id)}>Add to Sell
                                             </button>
                                         </div>
                                     </td>

@@ -31,7 +31,7 @@ phone_regex = RegexValidator(
 
 class CustomerProfile(models.Model):
     name = models.CharField(max_length=200)
-    phone_number = models.CharField(max_length=17)
+    phone_number = models.CharField(max_length=17, unique=True)
 
 
 class CartItemModel(models.Model):
@@ -40,6 +40,10 @@ class CartItemModel(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    sold = models.BooleanField(default=False)
+
+    def get_total(self):
+        return self.product.minimum_selling_price * self.quantity
 
 
 class OrderModel(models.Model):
@@ -49,3 +53,23 @@ class OrderModel(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class StockAlertModel(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+    def __str__(self):
+        return f"{self.product.name}"
+
+
+class ExpiryAlertModel(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.product.name}"
+

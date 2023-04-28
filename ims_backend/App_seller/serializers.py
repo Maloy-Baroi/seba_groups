@@ -25,7 +25,18 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItemModel
-        fields = '__all__'
+        fields = ['get_total', 
+                  'seller',
+                  'product',
+                  'quantity',
+                  'created_at',
+                  'updated_at',
+                  'sold',
+                  ]
+        
+        # extra_kwargs = {
+        #     "get_total": {'read_only', True}
+        # }
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -43,3 +54,8 @@ class OrderSerializer(serializers.ModelSerializer):
             CartItemModel.objects.create(order=order, **item_data)
 
         return order
+
+class StockAlertSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockAlertModel
+        fields = '__all__'
