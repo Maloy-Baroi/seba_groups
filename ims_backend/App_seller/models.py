@@ -34,10 +34,18 @@ class CustomerProfile(models.Model):
     phone_number = models.CharField(max_length=17)
 
 
+class CartItemModel(models.Model):
+    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 class OrderModel(models.Model):
-    products_n_quantity = models.JSONField()
-    seller = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, related_name="seller_name")
-    customer = models.ForeignKey(CustomerProfile, on_delete=models.DO_NOTHING, related_name="customer_name")
-    totalPrice = models.FloatField(default=1)
-
-
+    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
+    items = models.ManyToManyField(CartItemModel)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

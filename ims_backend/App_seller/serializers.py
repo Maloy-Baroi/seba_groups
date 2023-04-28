@@ -22,8 +22,24 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OrderModelSerializer(serializers.ModelSerializer):
-    customer = CustomerProfileSerializer()
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItemModel
+        fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True)
+
     class Meta:
         model = OrderModel
-        fields = ['id', 'products_n_quantity', 'seller', 'customer', 'total_price']
+        fields = '__all__'
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('items')
+        order = OrderModel.objects.create(**validated_data)
+
+        for item_data in items_data:
+            CartItemModel.objects.create(order=order, **item_data)
+
+        return order
