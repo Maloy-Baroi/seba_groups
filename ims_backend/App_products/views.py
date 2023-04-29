@@ -10,6 +10,7 @@ from rest_framework.response import Response
 
 from App_products.models import *
 from App_products.serializers import *
+from App_seller.models import *
 
 
 # Create your views here.
@@ -50,30 +51,33 @@ def productUpdateAPIView(request, pk):
     except product_object.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    shelf_number = request.data['shelf']
+    try:
+        shelf_number = request.data['shelf']
+        shelf_pattern = r"Shelf:\s+(\d+)"
+        row_pattern = r"Row:\s+(\d+)"
+        column_pattern = r"Column:\s+(\d+)"
 
-    shelf_pattern = r"Shelf:\s+(\d+)"
-    row_pattern = r"Row:\s+(\d+)"
-    column_pattern = r"Column:\s+(\d+)"
+        shelf_no = re.search(shelf_pattern, shelf_number).group(1)
+        row_no = re.search(row_pattern, shelf_number).group(1)
+        column_no = re.search(column_pattern, shelf_number).group(1)
 
-    shelf_no = re.search(shelf_pattern, shelf_number).group(1)
-    row_no = re.search(row_pattern, shelf_number).group(1)
-    column_no = re.search(column_pattern, shelf_number).group(1)
-
-    print(f"Shelf number: {shelf_no}")
-    print(f"Row number: {row_no}")
-    print(f"Column number: {column_no}")
-
-    my_shelf = Shelf.objects.get(number=shelf_no, row=row_no, column=column_no)
+        my_shelf = Shelf.objects.get(number=shelf_no, row=row_no, column=column_no)
+        product_object.shelf = my_shelf
+    except:
+        pass
 
     product_object.bought_price = request.data['bought_price']
     product_object.minimum_selling_price = request.data['minimum_selling_price']
     product_object.quantity = request.data['quantity']
-    product_object.shelf = my_shelf
     product_object.minimum_alert_quantity = request.data['minimum_alert_quantity']
     product_object.expiry_date = request.data['expiry_date']
 
     product_object.save()
+
+    if int(product_object.quantity) > int(product_object.minimum_alert_quantity):
+        stoct_alart = StockAlertModel.objects.filter(product=product_object)
+        if stoct_alart.exists():
+            stoct_alart[0].delete()
 
     return Response({
         'success': f"`{product_object.name}` is successfully updated",

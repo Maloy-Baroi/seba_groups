@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
 import productsTableStyle from "@/styles/productTable.module.css";
 
-const ProductsTableForUpdate = ({searchValue, onStartUpdate}) => {
+const ProductsTableForUpdate = ({searchValue, onStartUpdate, changeKey}) => {
     const [products, setProducts] = useState([]);
+    const [reloadTable, setReloadTable] = useState(changeKey);
 
     const searchOption = () => {
         const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchValue.toLowerCase()) || product.category.toLowerCase().includes(searchValue.toLowerCase()));
@@ -30,7 +31,7 @@ const ProductsTableForUpdate = ({searchValue, onStartUpdate}) => {
                 })
                 .catch(error => console.log('error', error));
         }
-    }, [searchValue])
+    }, [searchValue, reloadTable])
 
     const onHandle = (id) => {
         onHandleUpdate()

@@ -24,6 +24,8 @@ from .models import CartItemModel, OrderModel
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from django.db.models import F
+from django.db.models import Sum
+
 
 
 @api_view(['POST'])
@@ -164,7 +166,6 @@ class SingleOrderAPIView(generics.RetrieveAPIView):
         return Response(serializer.data, status = status.HTTP_306_RESERVED)
 
 
-
 class NearExpiryProductListView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
@@ -180,7 +181,6 @@ class NearExpiryProductListView(APIView):
         return Response(serializer.data)
 
 
-
 class LowStockProductAPIView(generics.ListAPIView):
     serializer_class = ProductModelSerializer
 
@@ -189,7 +189,7 @@ class LowStockProductAPIView(generics.ListAPIView):
 
 
 
-class ProductListView(generics.ListAPIView):
+class PurchasedProductAPIListView(generics.ListAPIView):
     queryset = ProductModel.objects.all()
     serializer_class = ProductModelSerializer
 
@@ -205,4 +205,10 @@ class ProductListView(generics.ListAPIView):
                 queryset = queryset.filter(created_at__date=created_at)
 
         return queryset
+
+
+class CustomerReportListAPIView(ListAPIView):
+    queryset = CustomerProfile.objects.annotate(total_price=Sum('ordermodel__total_price')).order_by('-total_price')
+    serializer_class = CustomerProfileSerializer
+    permission_classes = [IsAuthenticated]
 

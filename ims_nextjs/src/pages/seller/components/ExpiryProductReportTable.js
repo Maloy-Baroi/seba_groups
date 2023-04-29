@@ -44,7 +44,7 @@ const ExpiryProductReportTable = () => {
             <div className={"card " + productsTableStyle.cardBackground}>
                 <div className="card-body">
                     <h5 className="card-title mb-4">
-                        <b>Almost Expiry Products</b>
+                        <b>About to Expiry Products</b>
                     </h5>
                     <div className={"mt-3"}>
                         <table className={productsTableStyle.table}>

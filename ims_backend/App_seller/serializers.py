@@ -19,7 +19,18 @@ class SalesmanProfileSerializer(serializers.ModelSerializer):
 class CustomerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerProfile
-        fields = '__all__'
+        fields = [
+            'id',
+            'name',
+            'phone_number',
+            'get_total_price',
+            'get_total_order',
+        ]
+
+        extra_kwargs = {
+            'get_total_price': {'read_only': True},
+            'get_total_order': {'read_only': True}
+        }
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -59,7 +70,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "total_price",
             "created_at",
             "updated_at",
-            "get_customer_name"
+            "get_customer_name",
+            "get_customer_phone",
         ]
 
     def create(self, validated_data):

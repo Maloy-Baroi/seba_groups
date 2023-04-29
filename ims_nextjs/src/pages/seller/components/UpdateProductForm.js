@@ -1,12 +1,10 @@
 import ProductsTable from "@/pages/seller/components/ProductsTable";
 import productStyle from "@/styles/productsPage.module.css";
-import Image from "next/image";
-import pdf from "@/assets/icons/pdf.svg";
-import excel from "@/assets/icons/excel.svg";
-import printer from "@/assets/icons/printer.svg";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {useEffect, useState} from "react";
 import ProductsTableForUpdate from "@/pages/seller/components/ProductsTableForUpdate";
-import {getShelfList} from "@/pages/api/app_products";
+import {getProductList, getShelfList} from "@/pages/api/app_products";
 
 const UpdateProductForm = () => {
     const [productId, setProductId] = useState(null)
@@ -19,6 +17,8 @@ const UpdateProductForm = () => {
     const [productExpiryDate, setProductExpiryDate] = useState("");
     const [shelfNumber, setShelfNumber] = useState("");
     const [allShelf, setAllShelf] = useState([]);
+    const [all_prods, setAllProds] = useState([])
+    const [tableKey, setTableKey] = useState(0);
 
     const onHandleSearchChange = (e) => {
         setSearchItem(e.target.value);
@@ -33,6 +33,12 @@ const UpdateProductForm = () => {
         setSellingPrice(sp)
         setBuyingPrice(bp)
         setShelfNumber(shelf)
+        setTableKey(prevKey => prevKey + 1);
+    }
+
+    const fetchData = async () => {
+        const all_pro = await getProductList();
+        setAllProds(all_pro);
     }
 
     const onHandleUpdateView = (e) => {
@@ -56,7 +62,15 @@ const UpdateProductForm = () => {
             body: JSON.stringify(requestBody)
         })
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {
+                toast.success('Product updated!', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 1000, // Close the toast after 3 seconds
+                    hideProgressBar: true, // Hide the progress bar
+                });
+                document.getElementById('updateFormCard').style.display = "none";
+                setTableKey(prevKey => prevKey + 1);
+            })
             .catch(error => console.error(error))
     }
 
@@ -81,6 +95,7 @@ const UpdateProductForm = () => {
     useEffect(() => {
         document.getElementById('updateFormCard').style.display = "none";
         fetchShelves().then(r => true)
+        fetchData().then(r => true)
     }, [])
 
     return (
@@ -205,7 +220,7 @@ const UpdateProductForm = () => {
                         </div>
                     </div>
                     <div>
-                        <ProductsTableForUpdate searchValue={searchItem} onStartUpdate={onStartUpdate}/>
+                        <ProductsTableForUpdate key={tableKey} searchValue={searchItem} onStartUpdate={onStartUpdate} all_prods={all_prods} />
                     </div>
                 </div>
             </div>

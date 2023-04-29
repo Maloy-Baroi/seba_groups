@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import {onHandleCartLength} from "@/pages/api/apis";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {getCategoryList, getProductList} from "@/pages/api/app_products";
 
 
 const ProductsTable = ({searchValue, onHandleCartLength}) => {
@@ -14,21 +15,8 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
     }
 
     const fetchProduct = async () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-
-        fetch("http://127.0.0.1:8000/api-product/products/", requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                setProducts(result)
-            })
-            .catch(error => console.log('error', error));
+        const all_pro = await getProductList();
+        setProducts(all_pro);
     }
 
     useEffect(() => {

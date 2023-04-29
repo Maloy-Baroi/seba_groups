@@ -14,4 +14,6 @@ urlpatterns = [
     path('customer-profiles/', CustomerProfileListAPIView.as_view(), name='customer-profiles'),
     path('near-expiry-products/', NearExpiryProductListView.as_view(), name='near-expiry-products'),
     path('stock-less-than-minimum-quantity/', LowStockProductAPIView.as_view(), name='stock-less-than-minimum-quantity'),
+    path('purchased-products/', PurchasedProductAPIListView.as_view(), name='product-list'),
+    path('customer-report/', CustomerReportListAPIView.as_view(), name='customer-report'),
 ]

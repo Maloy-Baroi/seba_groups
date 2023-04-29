@@ -11,7 +11,7 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
     const getTotalPrice = () => {
         let total = 0
         boxItems.map((item) => {
-            total += item.quantity * item.get_total;
+            total += item.get_total;
         });
         return total.toFixed(2);
     }

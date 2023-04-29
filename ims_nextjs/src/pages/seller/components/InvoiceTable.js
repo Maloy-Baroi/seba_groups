@@ -66,6 +66,7 @@ const InvoiceTable = () => {
         <>
             <div>
                 <input
+                    className={"form-control mt-2 mb-3 w-50"}
                     type="text"
                     placeholder="Search by Order ID"
                     value={searchItem}

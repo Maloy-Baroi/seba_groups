@@ -35,6 +35,12 @@ class CustomerProfile(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+    def get_total_price(self):
+        return self.ordermodel_set.aggregate(total=models.Sum('total_price'))['total']
+    
+    def get_total_order(self):
+        return self.ordermodel_set.count()
 
 
 class CartItemModel(models.Model):
@@ -69,6 +75,9 @@ class OrderModel(models.Model):
 
     def get_customer_name(self):
         return self.customer.name
+    
+    def get_customer_phone(self):
+        return self.customer.phone_number
 
 
 class StockAlertModel(models.Model):
