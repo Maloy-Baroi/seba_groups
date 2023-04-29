@@ -1,5 +1,6 @@
 import productsTableStyle from "@/styles/productTable.module.css";
 import {useEffect, useState} from "react";
+import {getAlmostStockOutProducts} from "@/pages/api/app_products";
 
 const StockFinishedProduct = () => {
     const [products, setProducts] = useState([]);
@@ -10,22 +11,7 @@ const StockFinishedProduct = () => {
     }
 
     const fetchAlmostStockOutProduct = async () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-
-        fetch("http://127.0.0.1:8000/api-seller/stock-less-than-minimum-quantity/", requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                setProducts(result)
-                console.log("Stock", result)
-            })
-            .catch(error => console.log('error', error));
+        setProducts(await getAlmostStockOutProducts())
     }
 
     const formatDate = (dateValue) => {

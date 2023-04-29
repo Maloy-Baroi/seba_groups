@@ -68,6 +68,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "customer",
             "items",
             "total_price",
+            "payment_method",
             "created_at",
             "updated_at",
             "get_customer_name",

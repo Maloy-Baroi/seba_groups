@@ -110,7 +110,12 @@ const PageInvoice = () => {
                             <div className={"col-md-4"}></div>
                             <div className={"col-md-4"}>
                                 <p>
-                                    Total: <span>৳ {totalPrice}</span>
+                                    Total: <span>৳ {totalPrice} &nbsp;</span>
+                                    (<span>{
+                                        order.payment_method==="On Credit" ?
+                                            "Due"
+                                            : "Paid"
+                                    }</span>)
                                 </p>
                             </div>
                         </div>

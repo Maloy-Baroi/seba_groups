@@ -20,8 +20,8 @@ export default function Home() {
             if (group === "seller") {
                 navigator.push('/seller/dashboard')
             }
-            else if (group === "shopmanager") {
-                navigator.push('/shop-manager')
+            else if (group === "manager") {
+                navigator.push('/manager/dashboard')
             }
         }
     }, [])

@@ -94,6 +94,7 @@ def order_view(request):
         # Assuming you have a form to create an order
         name = request.data['baler_customer']
         phone_number = request.data['phone']
+        payment_method = request.data['payment_method']
 
         seller = request.user
         cart_items = CartItemModel.objects.filter(seller=seller, sold=False)
@@ -115,6 +116,7 @@ def order_view(request):
             order = OrderModel.objects.create(
                 seller=seller,
                 customer=customer,
+                payment_method=payment_method,
                 total_price=total_price
             )
             order.items.add(*cart_items)
@@ -128,6 +130,7 @@ def order_view(request):
                 'seller': order.seller.id,
                 'customer': order.customer.id,
                 'total_price': order.total_price,
+                'payment_method': payment_method,
                 'items': [{'product': item.product.id, 'quantity': item.quantity} for item in order.items.all()]
             }
             return Response(order_data, status=status.HTTP_201_CREATED)
@@ -150,6 +153,11 @@ class OrderListAPIView(ListAPIView):
     queryset = OrderModel.objects.all().order_by('-created_at')
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        queryset = OrderModel.objects.filter(seller=request.user).order_by('-created_at')
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class SingleOrderAPIView(generics.RetrieveAPIView):

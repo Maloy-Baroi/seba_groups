@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import InvoiceStyle from "@/styles/sellBox.module.css"
 import {useRouter} from "next/router";
+import {getOrderListForLoginUser} from "@/pages/api/app_products";
 
 const InvoiceTable = () => {
     const [orders, setOrders] = useState([])
@@ -8,22 +9,10 @@ const InvoiceTable = () => {
 
     const navigator = useRouter()
 
-    const fetchOrderData = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-
-        fetch("http://127.0.0.1:8000/api-seller/order-list/", requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                setOrders(result)
-            })
-            .catch(error => console.log('error', error));
+    const fetchOrderData = async () => {
+        const ordersList = await getOrderListForLoginUser();
+        console.log(ordersList);
+        setOrders(ordersList);
     }
 
     function formatDate(date) {
@@ -78,7 +67,7 @@ const InvoiceTable = () => {
                     paddingTop: "10px",
                     color: "#FF9F43"
                 }}>
-                    <div className={"col-md-3"}>
+                    <div className={"col-md-2"}>
                         Order ID
                     </div>
                     <div className={"col-md-3"}>
@@ -88,6 +77,9 @@ const InvoiceTable = () => {
                         Customer
                     </div>
                     <div className={"col-md-3"}>
+                        Payment Method
+                    </div>
+                    <div className={"col-md-1"}>
                         Action
                     </div>
                 </div>
@@ -106,8 +98,8 @@ const InvoiceTable = () => {
 
                         return (
                             <div className={"row text-center mb-2 mt-2 " + InvoiceStyle.tabRow} key={index}>
-                                <div className={"col-md-3"}>
-                                    seba2023oid-{item.id}
+                                <div className={"col-md-2"}>
+                                    sebaoid-{item.id}
                                 </div>
                                 <div className={"col-md-3"}>
                                     {formattedDate}, {formattedTime}
@@ -116,6 +108,9 @@ const InvoiceTable = () => {
                                     {item.get_customer_name}
                                 </div>
                                 <div className={"col-md-3"}>
+                                    {item.payment_method}
+                                </div>
+                                <div className={"col-md-1"}>
                                     <button className={"btn btn-danger"} onClick={() => handlePrint(item.id)}>Print</button>
                                 </div>
                             </div>

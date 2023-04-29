@@ -66,7 +66,7 @@ const SellingBox = () => {
     };
 
 
-    const handleSellSubmission = async (customerName, customerPhn) => {
+    const handleSellSubmission = async (customerName, customerPhn, payment_method) => {
         // e.preventDefault();
         var myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
@@ -74,6 +74,7 @@ const SellingBox = () => {
         var formdata = new FormData();
         formdata.append("baler_customer", customerName);
         formdata.append("phone", customerPhn);
+        formdata.append("payment_method", payment_method);
 
         var requestOptions = {
             method: 'POST',
@@ -129,7 +130,7 @@ const SellingBox = () => {
         <>
             <OnlyHead page={"Selling Box"}/>
             <main>
-                <DashboardNavbar/>
+                <DashboardNavbar />
                 <div className={"row w-100"}>
                     <div className={"col-md-2 " + dashboardStyle.sidebarContainer}>
                         <Sidebar/>

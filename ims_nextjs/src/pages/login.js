@@ -66,11 +66,11 @@ const login = () => {
                         localStorage.setItem("group", result['group'])
                         localStorage.setItem("auth", true)
                         navigator.push('seller/dashboard');
-                    } else if (result['group'] === 'shopmanager') {
+                    } else if (result['group'] === 'manager') {
                         localStorage.setItem("access_token", result['access'])
                         localStorage.setItem("group", result['group'])
                         localStorage.setItem("auth", true)
-                        navigator.push('/shop-manager')
+                        navigator.push('/manager/dashboard')
                     }
                 }
             })

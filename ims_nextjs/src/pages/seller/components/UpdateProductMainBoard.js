@@ -2,7 +2,7 @@ import MainboardHead from "@/pages/seller/components/MainboardHead";
 import productStyle from "@/styles/productsPage.module.css";
 import UpdateProductForm from "@/pages/seller/components/UpdateProductForm";
 
-const UpdateProductMainBoard = () => {
+const UpdateProductMainBoard = ({onHandleNotificationUpdate}) => {
     return (
         <>
             <div className={"row"}>
@@ -22,7 +22,7 @@ const UpdateProductMainBoard = () => {
                             </div>
                         </div>
                         <div>
-                            <UpdateProductForm />
+                            <UpdateProductForm onHandleNotificationUpdate={onHandleNotificationUpdate} />
                         </div>
                     </div>
                 </div>

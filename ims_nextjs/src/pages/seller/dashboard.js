@@ -7,7 +7,6 @@ import {useEffect} from "react";
 import {useRouter} from "next/router";
 
 const Dashboard = () => {
-
     const navigator = useRouter();
 
     useEffect(() => {
@@ -23,7 +22,7 @@ const Dashboard = () => {
                 <title>Seba Pharmacy | Seller | Dashboard</title>
             </Head>
             <main>
-                <DashboardNavbar/>
+                <DashboardNavbar />
                 <div className={"row w-100"}>
                     <div className={"col-md-2 " + dashboardStyle.sidebarContainer}>
                         <Sidebar activeState={"dashboard"}/>

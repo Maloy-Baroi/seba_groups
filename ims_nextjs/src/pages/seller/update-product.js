@@ -3,8 +3,15 @@ import DashboardNavbar from "@/pages/seller/components/DashboardNavbar";
 import dashboardStyle from "@/styles/dashboard.module.css";
 import Sidebar from "@/pages/seller/components/Sidebar";
 import UpdateProductMainBoard from "@/pages/seller/components/UpdateProductMainBoard";
+import {useState} from "react";
 
 const UpdateProduct = () => {
+    const [updateKey, setUpdateKey] = useState(0)
+
+    const onHandleNotificationUpdate = () => {
+        setUpdateKey(prev => prev+1)
+    }
+
   return (
       <>
         <div>
@@ -12,7 +19,7 @@ const UpdateProduct = () => {
                 <title>Seba Pharmacy | Seller | Create New Products</title>
             </Head>
             <main>
-                <DashboardNavbar />
+                <DashboardNavbar key={updateKey} />
                 <div className={"row w-100"}>
                     <div className={"col-md-2 " + dashboardStyle.sidebarContainer}>
                         <Sidebar activeState={"update_products"}/>
@@ -21,7 +28,7 @@ const UpdateProduct = () => {
                         backgroundColor: "#f8f8f8"
                     }}>
                         <div className={dashboardStyle.content}>
-                            <UpdateProductMainBoard />
+                            <UpdateProductMainBoard onHandleNotificationUpdate={onHandleNotificationUpdate} />
                         </div>
                     </div>
                 </div>

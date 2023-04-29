@@ -1,13 +1,14 @@
 import productsTableStyle from "@/styles/productTable.module.css";
 import {useState, useEffect} from "react";
 import {onHandleCartLength} from "@/pages/api/apis";
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {getCategoryList, getProductList} from "@/pages/api/app_products";
 
 
 const ProductsTable = ({searchValue, onHandleCartLength}) => {
     const [products, setProducts] = useState([]);
+    const [userType, setUserType] = useState("")
 
     const searchOption = () => {
         const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchValue.toLowerCase()) || product.category.toLowerCase().includes(searchValue.toLowerCase()));
@@ -24,6 +25,7 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
             searchOption()
         } else {
             fetchProduct().then(r => console.log(r))
+            setUserType(localStorage.getItem('group'))
         }
     }, [searchValue])
 
@@ -49,8 +51,7 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                 const updatedItems = products.map((item) => {
                     if (item.id === id) {
                         return {...item, quantity: item.quantity - 1};
-                    }
-                    else {
+                    } else {
                         return item
                     }
                 });
@@ -82,7 +83,9 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                                 <th scope="col">Shelf</th>
                                 <th scope="col">Expiry Date</th>
                                 <th scope="col">Price</th>
-                                <th scope="col">Sell</th>
+                                {userType === "seller" ?
+                                    <th scope="col">Sell</th>
+                                    : ""}
                             </tr>
                             </thead>
                             <tbody>
@@ -113,6 +116,7 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                                             &#2547; {item.minimum_selling_price}
                                         </b>
                                     </td>
+                                    {userType === "seller" ?
                                     <td data-label="Sell">
                                         <div>
                                             <button className={productsTableStyle.AddToSellBtn}
@@ -120,6 +124,8 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                                             </button>
                                         </div>
                                     </td>
+                                        : ""
+                                    }
                                 </tr>
                             ))}
                             </tbody>
@@ -127,7 +133,7 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                     </div>
                 </div>
             </div>
-            <ToastContainer />
+            <ToastContainer/>
         </>
     );
 }

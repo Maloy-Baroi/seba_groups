@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import productsTableStyle from "@/styles/productTable.module.css";
+import {getNearToExpiredDate} from "@/pages/api/app_products";
 
 const ExpiryProductReportTable = () => {
 
@@ -11,22 +12,8 @@ const ExpiryProductReportTable = () => {
     }
 
     const fetchAlmostExpiryProduct = async () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-
-        fetch("http://127.0.0.1:8000/api-seller/near-expiry-products/", requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                setProducts(result)
-                console.log("Expiry", result)
-            })
-            .catch(error => console.log('error', error));
+        const prod = await getNearToExpiredDate()
+        setProducts(prod)
     }
 
     const formatDate = (dateValue) => {

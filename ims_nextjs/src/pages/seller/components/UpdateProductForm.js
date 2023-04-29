@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import ProductsTableForUpdate from "@/pages/seller/components/ProductsTableForUpdate";
 import {getProductList, getShelfList} from "@/pages/api/app_products";
 
-const UpdateProductForm = () => {
+const UpdateProductForm = ({onHandleNotificationUpdate}) => {
     const [productId, setProductId] = useState(null)
     const [searchItem, setSearchItem] = useState("")
     const [product_name, setProductName] = useState("");
@@ -63,13 +63,9 @@ const UpdateProductForm = () => {
         })
             .then(response => response.json())
             .then(data => {
-                toast.success('Product updated!', {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 1000, // Close the toast after 3 seconds
-                    hideProgressBar: true, // Hide the progress bar
-                });
                 document.getElementById('updateFormCard').style.display = "none";
                 setTableKey(prevKey => prevKey + 1);
+                onHandleNotificationUpdate()
             })
             .catch(error => console.error(error))
     }

@@ -6,6 +6,7 @@ import {console} from "next/dist/compiled/@edge-runtime/primitives/console";
 const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHandleWrittenQuantity}) => {
     const [customerName, setCustomerName] = useState("")
     const [customerPhn, setCustomerPhn] = useState("")
+    const [paymentMethod, setPaymentMethod] = useState("")
     const [customerProfiles, setCustomerProfiles] = useState([])
 
     const getTotalPrice = () => {
@@ -143,13 +144,27 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
             <form className={"form-group mt-3 mb-3"}>
                 <legend>Customer Details</legend>
                 <div className={"row"}>
-                    <div className={"col-md-6"}>
+                    <div className={"col-md-4"}>
                         <input className={"form-control"} placeholder={"Customer Name"} value={customerName}
                                onChange={e => setCustomerName(e.target.value)}/>
                     </div>
-                    <div className={"col-md-6"}>
+                    <div className={"col-md-4"}>
                         <input className={"form-control"} placeholder={"Customer Phone"} value={customerPhn}
                                onChange={e => setCustomerPhn(e.target.value)}/>
+                    </div>
+                    <div className={"col-md-4"}>
+                        <select className={"form-control"} value={paymentMethod}
+                                onChange={e => setPaymentMethod(e.target.value)}>
+                            <option>Select Payment Method</option>
+                            <option>Cash</option>
+                            <option>Bkash</option>
+                            <option>Nagad</option>
+                            <option>Rocket</option>
+                            <option>Upay</option>
+                            <option>Debit Card</option>
+                            <option>Credit Card</option>
+                            <option>On Credit</option>
+                        </select>
                     </div>
                 </div>
             </form>
@@ -158,7 +173,7 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
                     <div className={"mt-4"}>
                         {customerName && customerPhn && boxItems.length > 0 ?
                             <button className={"btn btn-danger btn-md w-75"}
-                                    onClick={() => handleSellSubmission(customerName, customerPhn)}>
+                                    onClick={() => handleSellSubmission(customerName, customerPhn, paymentMethod)}>
                                 Sell
                             </button>
                             :

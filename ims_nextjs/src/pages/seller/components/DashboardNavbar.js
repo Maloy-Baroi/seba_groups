@@ -2,13 +2,31 @@ import navStyle from "../../../styles/dashboard.module.css";
 import Link from "next/link";
 import {useEffect, useState} from "react";
 import {onHandleCartLength} from "@/pages/api/apis";
+import {getAlmostExpiryProductsList, getNearToExpiredDate, getStockAlert} from "@/pages/api/app_products";
 
 const DashboardNavbar = () => {
     const [cartLength, setCartLength] = useState(0);
+    const [stockNotificationQuantity, setStockNotificationQuantity] = useState(0)
+    const [expiryNotificationQuantity, setExpiryNotificationQuantity] = useState(0)
+    const [userType, setUserType] = useState("")
+
+    const findStockQuantityNotification = async () => {
+        const alerts = await getStockAlert()
+        setStockNotificationQuantity(alerts.length)
+    }
+
+    const findExpiryProductNotification = async () => {
+        const alertQ = await getNearToExpiredDate();
+        console.log(alertQ)
+        setExpiryNotificationQuantity(alertQ.length)
+    }
 
     useEffect(() => {
         onHandleCartLength().then(r => setCartLength(r.length));
-    }, [cartLength])
+        findStockQuantityNotification().then(r => true)
+        findExpiryProductNotification().then(r => true)
+        setUserType(localStorage.getItem('group'))
+    }, [cartLength, stockNotificationQuantity])
 
     return (
         <>
@@ -22,31 +40,40 @@ const DashboardNavbar = () => {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li className={"nav-item " + navStyle.navItem}>
-                                <Link className="nav-link active" aria-current="page" href={"/seller/selling-box/"}>
-                                    <i className={"fa fa-shopping-cart"}>
+                            {userType === "seller" ?
+                                <li className={"nav-item " + navStyle.navItem} title={"Cart"}>
+                                    <Link className="nav-link active" aria-current="page" href={"/seller/selling-box/"}>
+                                        <i className={"fa fa-shopping-cart"}>
+                                            <sup className={"m-1 " + navStyle.supText}>
+                                                {cartLength}
+                                            </sup>
+                                        </i>
+                                    </Link>
+                                </li>
+                                : ""}
+                            <li className={"nav-item " + navStyle.navItem} title={"Expiry"}>
+                                <Link className="nav-link active" aria-current="page"
+                                      href={"/" + userType + "/inventory-report"}>
+                                    <i className={"far fa-clock"}>
                                         <sup className={"m-1 " + navStyle.supText}>
-                                            {cartLength}
+                                            {expiryNotificationQuantity}
+                                        </sup>
+                                    </i>
+                                </Link>
+                            </li>
+                            <li className={"nav-item " + navStyle.navItem} title={"Stock"}>
+                                <Link className="nav-link" href={"/" + userType + "/inventory-report"}>
+                                    <i className={"far fa-bell"}>
+                                        <sup className={"m-1 " + navStyle.supText}>
+                                            {stockNotificationQuantity}
                                         </sup>
                                     </i>
                                 </Link>
                             </li>
                             <li className={"nav-item " + navStyle.navItem}>
-                                <Link className="nav-link active" aria-current="page" href={"/"}>
-                                    <i className={"far fa-message"}>
-                                        <sup className={"m-1 " + navStyle.supText}>2</sup>
-                                    </i>
-                                </Link>
-                            </li>
-                            <li className={"nav-item " + navStyle.navItem}>
                                 <Link className="nav-link" href={"/"}>
-                                    <i className={"far fa-bell"}>
-                                        <sup className={"m-1 " + navStyle.supText}>1</sup>
-                                    </i>
+                                    {userType === "seller" ? "Seller" : "Manager"}
                                 </Link>
-                            </li>
-                            <li className={"nav-item " + navStyle.navItem}>
-                                <Link className="nav-link" href={"/"}>Salesman</Link>
                             </li>
                         </ul>
                     </div>
