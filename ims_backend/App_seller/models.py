@@ -67,6 +67,9 @@ class OrderModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def get_customer_name(self):
+        return self.customer.name
+
 
 class StockAlertModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)

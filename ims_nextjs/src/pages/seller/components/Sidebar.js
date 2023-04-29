@@ -136,7 +136,18 @@ const Sidebar = (props) => {
                     <li className="submenu-open">
                         <h6 className="submenu-hdr">- Reports</h6>
                         <ul className={sidebarStyle.sidebarNavUl}>
-                            <li className={props.activeState === "sales_report" ? sidebarStyle.active : ""}>
+                            <li className={props.activeState === "invoice-report" ? sidebarStyle.active : ""}>
+                                <Link href={"/seller/invoice-report"}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                         strokeLinecap="round" strokeLinejoin="round"
+                                         className="feather feather-file">
+                                        <path
+                                            d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                        <polyline points="13 2 13 9 20 9"></polyline>
+                                    </svg>
+                                    <span>Invoice Report</span></Link></li>
+                            <li className={props.activeState === "sales-report" ? sidebarStyle.active : ""}>
                                 <Link href={"/seller/"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -147,8 +158,8 @@ const Sidebar = (props) => {
                                         <line x1="6" y1="20" x2="6" y2="14"></line>
                                     </svg>
                                     <span>Sales Report</span></Link></li>
-                            <li className={props.activeState === "inventory_report" ? sidebarStyle.active : ""}>
-                                <Link href={"/seller/"}>
+                            <li className={props.activeState === "inventory-report" ? sidebarStyle.active : ""}>
+                                <Link href={"/seller/inventory-report"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -157,19 +168,8 @@ const Sidebar = (props) => {
                                         <line x1="1" y1="10" x2="23" y2="10"></line>
                                     </svg>
                                     <span>Inventory Report</span></Link></li>
-                            <li className={props.activeState === "invoice_report" ? sidebarStyle.active : ""}>
-                                <Link href={"/seller/"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                         strokeLinecap="round" strokeLinejoin="round"
-                                         className="feather feather-file">
-                                        <path
-                                            d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                                        <polyline points="13 2 13 9 20 9"></polyline>
-                                    </svg>
-                                    <span>Invoice Report</span></Link></li>
-                            <li className={props.activeState === "purchase_report" ? sidebarStyle.active : ""}>
-                                <Link href={"/seller/"}>
+                            <li className={props.activeState === "purchase-report" ? sidebarStyle.active : ""}>
+                                <Link href={"/seller/purchase-report"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -179,8 +179,8 @@ const Sidebar = (props) => {
                                         <line x1="6" y1="20" x2="6" y2="16"></line>
                                     </svg>
                                     <span>Purchase Report</span></Link></li>
-                            <li className={props.activeState === "customer_report" ? sidebarStyle.active : ""}>
-                                <Link href={"/seller/"}>
+                            <li className={props.activeState === "customer-report" ? sidebarStyle.active : ""}>
+                                <Link href={"/seller/customer-report"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"

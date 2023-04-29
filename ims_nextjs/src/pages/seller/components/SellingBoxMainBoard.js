@@ -29,10 +29,14 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
         fetch("http://127.0.0.1:8000/api-seller/customer-profiles/", requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
                 setCustomerProfiles(result)
             })
             .catch(error => console.log('error', error));
+    }
+
+    const CustomerFilter = (searchValue) => {
+        const filteredProducts = customerProfiles.filter(profile => profile.name.toLowerCase().includes(searchValue.toLowerCase()));
+        setProducts(filteredProducts);
     }
 
     useEffect(() => {
@@ -98,7 +102,8 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
                                             <div className={"col-md-3"}>
                                                 <div className={"row"}>
                                                     <div className={"col-md-2"}>
-                                                        <button className={"btn btn-danger"} onClick={() => deleteItem(item.id)}>
+                                                        <button className={"btn btn-danger"}
+                                                                onClick={() => deleteItem(item.id)}>
                                                             <i className={"fa fa-close"}></i>
                                                         </button>
                                                     </div>
@@ -110,7 +115,7 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
                                             <div className={"col-md-3"}>
                                                 <h5>{item.get_product_strength}</h5>
                                             </div>
-                                            <div className={"col-md-3"} >
+                                            <div className={"col-md-3"}>
                                                 <h5 style={{
                                                     display: "inline-flex",
                                                     justifyContent: "center"
@@ -139,17 +144,19 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
                 <legend>Customer Details</legend>
                 <div className={"row"}>
                     <div className={"col-md-6"}>
-                        <input className={"form-control"} placeholder={"Customer Name"} value={customerName} onChange={e => setCustomerName(e.target.value)} />
+                        <input className={"form-control"} placeholder={"Customer Name"} value={customerName}
+                               onChange={e => setCustomerName(e.target.value)}/>
                     </div>
                     <div className={"col-md-6"}>
-                        <input className={"form-control"} placeholder={"Customer Phone"} value={customerPhn} onChange={e => setCustomerPhn(e.target.value)} />
+                        <input className={"form-control"} placeholder={"Customer Phone"} value={customerPhn}
+                               onChange={e => setCustomerPhn(e.target.value)}/>
                     </div>
                 </div>
             </form>
             <div className={"row"}>
                 <div className={"col-md-4"}>
                     <div className={"mt-4"}>
-                        {customerName && customerPhn ?
+                        {customerName && customerPhn && boxItems.length > 0 ?
                             <button className={"btn btn-danger btn-md w-75"}
                                     onClick={() => handleSellSubmission(customerName, customerPhn)}>
                                 Sell

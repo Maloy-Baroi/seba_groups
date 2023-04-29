@@ -1,7 +1,9 @@
 import productsTableStyle from "@/styles/productTable.module.css";
 import {useState, useEffect} from "react";
 import {onHandleCartLength} from "@/pages/api/apis";
-import Swal from "sweetalert2"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const ProductsTable = ({searchValue, onHandleCartLength}) => {
     const [products, setProducts] = useState([]);
@@ -65,11 +67,11 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                     }
                 });
                 setProducts(updatedItems);
-                Swal.fire(
-                    'Success!',
-                    result['message'],
-                    'success'
-                )
+                toast.success('Product added', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 1000, // Close the toast after 3 seconds
+                    hideProgressBar: true, // Hide the progress bar
+                });
             })
             .catch(error => console.log('error', error));
 
@@ -137,6 +139,7 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </>
     );
 }

@@ -12,7 +12,6 @@ const SellingBox = () => {
     const [boxProduct, setBoxProduct] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
     const [boxProductChanged, setBoxProductChanged] = useState(false); // Add state variable to track changes
-
     const navigator = useRouter()
 
     const addToBox = (id, quantity) => {
@@ -91,6 +90,7 @@ const SellingBox = () => {
                     'Successfully ordered!',
                     'success'
                 )
+                navigator.push('/seller/invoice-report')
             })
             .catch(error => console.log('error', error));
     }

@@ -138,3 +138,23 @@ class CustomerProfileListAPIView(generics.ListAPIView):
     queryset = CustomerProfile.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
+
+class OrderListAPIView(ListAPIView):
+    queryset = OrderModel.objects.all().order_by('-created_at')
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class SingleOrderAPIView(generics.RetrieveAPIView):
+    queryset = OrderModel.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_fields = 'id'
+    
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        lookup_value = self.kwargs.get(self.lookup_fields)
+        obj = queryset.get(id=lookup_value)
+        serializer = self.get_serializer(obj, many=False)
+        return Response(serializer.data, status = status.HTTP_306_RESERVED)
+

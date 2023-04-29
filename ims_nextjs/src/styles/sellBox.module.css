@@ -39,7 +39,7 @@
 .tabRow {
     background-color: rgba(50, 253, 166, 0.22);
     color: black;
-    padding: 6px 0 !important;
+    padding: 10px 0 !important;
 }
 
 .tabRow:hover {
