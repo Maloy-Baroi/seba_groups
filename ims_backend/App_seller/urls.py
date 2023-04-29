@@ -11,5 +11,7 @@ urlpatterns = [
     path('order-list/', OrderListAPIView.as_view(), name='order-list'),
     path('order/', order_view, name='order-view'),
     path('stock-alerts/', StockAlertListAPIView.as_view(), name='stock-alerts'),
-    path('customer-profiles/', CustomerProfileListAPIView.as_view(), name='customer-profiles')
+    path('customer-profiles/', CustomerProfileListAPIView.as_view(), name='customer-profiles'),
+    path('near-expiry-products/', NearExpiryProductListView.as_view(), name='near-expiry-products'),
+    path('stock-less-than-minimum-quantity/', LowStockProductAPIView.as_view(), name='stock-less-than-minimum-quantity'),
 ]

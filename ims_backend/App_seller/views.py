@@ -11,14 +11,19 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 from App_login.models import CustomUser
 from App_products.models import ProductModel
+from App_products.serializers import ProductModelSerializer
 from .models import OrderModel, CustomerProfile
 from .serializers import *
 
 
 # Create your views here.
 from django.shortcuts import render, redirect
+from django.utils import timezone
+from datetime import timedelta
 from .models import CartItemModel, OrderModel
 from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
+from django.db.models import F
 
 
 @api_view(['POST'])
@@ -157,4 +162,47 @@ class SingleOrderAPIView(generics.RetrieveAPIView):
         obj = queryset.get(id=lookup_value)
         serializer = self.get_serializer(obj, many=False)
         return Response(serializer.data, status = status.HTTP_306_RESERVED)
+
+
+
+class NearExpiryProductListView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request):
+        # Calculate the threshold date for near expiry
+        threshold_date = timezone.now() + timedelta(days=30)  # Adjust the number of days as needed
+
+        # Retrieve the products with expiry date near to end
+        products = ProductModel.objects.filter(expiry_date__lte=threshold_date)
+
+        # Serialize the products
+        serializer = ProductModelSerializer(products, many=True)
+
+        return Response(serializer.data)
+
+
+
+class LowStockProductAPIView(generics.ListAPIView):
+    serializer_class = ProductModelSerializer
+
+    def get_queryset(self):
+        return ProductModel.objects.filter(quantity__lte=F('minimum_alert_quantity'))
+
+
+
+class ProductListView(generics.ListAPIView):
+    queryset = ProductModel.objects.all()
+    serializer_class = ProductModelSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        update_date = self.request.query_params.get('update_date')
+        if update_date:
+            queryset = queryset.filter(update_at__date=update_date)
+        else:
+            created_at = self.request.query_params.get('created_at')
+            if created_at:
+                queryset = queryset.filter(created_at__date=created_at)
+
+        return queryset
 

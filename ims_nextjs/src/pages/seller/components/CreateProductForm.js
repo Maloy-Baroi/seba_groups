@@ -8,6 +8,7 @@ import {
     getBrandList, getShelfList
 } from "@/pages/api/app_products"
 import productFormStyle from "@/styles/productForm.module.css";
+import {useRouter} from "next/router";
 
 const CreateProductForm = () => {
     const [p_name, setPName] = useState("")
@@ -30,8 +31,9 @@ const CreateProductForm = () => {
     const [subCategorySearchText, setSubCategorySearchText] = useState("");
     const [brandSearchText, setBrandSearchText] = useState("");
 
-    useEffect(() => {
+    const navigator = useRouter()
 
+    useEffect(() => {
         const fetchProductNames = async () => {
             // eslint-disable-next-line @next/next/no-assign-module-variable
             const module = await import("../../../assets/medicines.json");
@@ -167,7 +169,9 @@ const CreateProductForm = () => {
             body: JSON.stringify(requestBody)
         })
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data =>
+                navigator.push('/seller/products')
+            )
             .catch(error => console.error(error))
     }
 
@@ -285,6 +289,12 @@ const CreateProductForm = () => {
                                     <option>Select type (capsule/table)</option>
                                     <option>Tablet</option>
                                     <option>Capsule</option>
+                                    <option>Syrup</option>
+                                    <option>Suppository</option>
+                                    <option>Drops</option>
+                                    <option>Inhalers</option>
+                                    <option>Injections</option>
+                                    <option>Implants or patches</option>
                                 </select>
                             </div>
                         </div>

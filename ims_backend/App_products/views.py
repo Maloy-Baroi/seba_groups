@@ -19,7 +19,7 @@ class ProductAPIView(generics.ListCreateAPIView):
     serializer_class = ProductModelSerializer
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset().exclude(expiry_date__lte=datetime.today().date())
+        queryset = self.get_queryset().exclude(expiry_date__lte=datetime.today()).order_by('expiry_date')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
