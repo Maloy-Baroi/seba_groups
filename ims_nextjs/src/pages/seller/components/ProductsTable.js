@@ -1,5 +1,7 @@
 import productsTableStyle from "@/styles/productTable.module.css";
 import {useState, useEffect} from "react";
+import {onHandleCartLength} from "@/pages/api/apis";
+import Swal from "sweetalert2"
 
 const ProductsTable = ({searchValue, onHandleCartLength}) => {
     const [products, setProducts] = useState([]);
@@ -9,29 +11,33 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
         setProducts(filteredProducts);
     }
 
+    const fetchProduct = async () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api-product/products/", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                setProducts(result)
+            })
+            .catch(error => console.log('error', error));
+    }
+
     useEffect(() => {
         if (searchValue) {
             searchOption()
         } else {
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
-
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow'
-            };
-
-            fetch("http://127.0.0.1:8000/api-product/products/", requestOptions)
-                .then(response => response.json())
-                .then(result => {
-                    setProducts(result)
-                })
-                .catch(error => console.log('error', error));
+            fetchProduct().then(r => console.log(r))
         }
     }, [searchValue])
 
-    const onHandle = (id) => {
+    const onHandleAddToBox = async (id) => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
 
@@ -47,9 +53,26 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
         };
 
         fetch("http://127.0.0.1:8000/api-seller/cart/", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+            .then(response => response.json())
+            .then(result => {
+                console.log(result['message'])
+                const updatedItems = products.map((item) => {
+                    if (item.id === id) {
+                        return {...item, quantity: item.quantity - 1};
+                    }
+                    else {
+                        return item
+                    }
+                });
+                setProducts(updatedItems);
+                Swal.fire(
+                    'Success!',
+                    result['message'],
+                    'success'
+                )
+            })
             .catch(error => console.log('error', error));
+
     }
 
     return (
@@ -103,7 +126,7 @@ const ProductsTable = ({searchValue, onHandleCartLength}) => {
                                     <td data-label="Sell">
                                         <div>
                                             <button className={productsTableStyle.AddToSellBtn}
-                                                    onClick={() => onHandle(item.id)}>Add to Sell
+                                                    onClick={() => onHandleAddToBox(item.id)}>Add to Sell
                                             </button>
                                         </div>
                                     </td>

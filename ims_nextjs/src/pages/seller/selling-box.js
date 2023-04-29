@@ -5,12 +5,38 @@ import Sidebar from "@/pages/seller/components/Sidebar";
 import SellingBoxMainBoard from "@/pages/seller/components/SellingBoxMainBoard";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import {console} from "next/dist/compiled/@edge-runtime/primitives/console";
+import Swal from "sweetalert2"
 
 const SellingBox = () => {
     const [boxProduct, setBoxProduct] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
+    const [boxProductChanged, setBoxProductChanged] = useState(false); // Add state variable to track changes
 
     const navigator = useRouter()
+
+    const addToBox = (id, quantity) => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
+
+        var formdata = new FormData();
+        formdata.append("product_id", id);
+        formdata.append("quantity", quantity);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api-seller/cart/", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => console.log('error', error));
+    }
 
     const takeCartData = () => {
         var myHeaders = new Headers();
@@ -25,96 +51,79 @@ const SellingBox = () => {
         fetch("http://127.0.0.1:8000/api-seller/cart-list/", requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
                 setBoxProduct(result)
             })
             .catch(error => console.log('error', error));
     }
 
-    const getTotalPrice = () => {
-        const sellCard = JSON.parse(localStorage.getItem('sellcard') || '[]');
-        let total = 0;
-        for (let i = 0; i < sellCard.length; i++) {
-            total += sellCard[i]['quantity'] * sellCard[i]['thisProductPrice'];
+    const onHandleWrittenQuantity = (itemId, quantity, itemQuantity) => {
+        if (itemQuantity) {
+            addToBox(itemId, quantity - itemQuantity);
+        } else {
+            addToBox(itemId, quantity);
         }
-        setTotalPrice(total)
-    }
-
-    const handleAddQuantity = (id) => {
-        const updatedBoxProduct = boxProduct.map((item) => {
-            if (item.id === id) {
-                return {...item, quantity: item.quantity + 1, existingQuantity: item.existingQuantity - 1};
-            } else {
-                return item;
-            }
-        });
-        setBoxProduct(updatedBoxProduct);
-        localStorage.setItem('sellcard', JSON.stringify(updatedBoxProduct));
-        getTotalPrice()
+        takeCartData();
+        setBoxProductChanged(true);
     };
 
-
-    const handleMinusQuantity = (itemId) => {
-        const updatedItems = boxProduct.map((item) => {
-            if (item.id === itemId && item.quantity > 1) {
-                // Decrease the quantity by 1
-                return {...item, quantity: item.quantity - 1, existingQuantity: item.existingQuantity + 1};
-            }
-            return item;
-        });
-        setBoxProduct(updatedItems);
-
-        // Update the localStorage value
-        const updatedCart = JSON.stringify(updatedItems);
-        localStorage.setItem('sellcard', updatedCart);
-        getTotalPrice()
-    };
 
     const handleSellSubmission = async (customerName, customerPhn) => {
         // e.preventDefault();
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
 
-        const sellCard = JSON.parse(localStorage.getItem('sellcard') || '[]');
-        let prod_n_qty = [];
-        sellCard.map(item => {
-            prod_n_qty.push({
-                id: item.id,
-                quantity: item.quantity
+        var formdata = new FormData();
+        formdata.append("baler_customer", customerName);
+        formdata.append("phone", customerPhn);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api-seller/order/", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                Swal.fire(
+                    'Good job!',
+                    'Successfully ordered!',
+                    'success'
+                )
             })
-        })
-        console.log(prod_n_qty)
-        try {
-            const response = await fetch('http://127.0.0.1:8000/api-seller/orders/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-                },
-                body: JSON.stringify({
-                    "products_n_quantity": prod_n_qty,
-                    "customerName": customerName,
-                    "phone_number": customerPhn,
-                    "totalPrice": totalPrice,
-                    "access_token": localStorage.getItem('access_token')
-                }),
-            });
-
-            if (response.ok) {
-                localStorage.removeItem("sellcard")
-
-                await navigator.push('/seller/products/')
-            } else {
-                console.log("something wrong!")
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
+            .catch(error => console.log('error', error));
     }
 
+    const deleteItem = (cartId) => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${localStorage.getItem("access_token")}`);
+
+        var formdata = new FormData();
+        formdata.append("cartId", cartId);
+
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api-seller/cart-delete/", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
+        takeCartData();
+        setBoxProductChanged(true);
+    }
 
     useEffect(() => {
         takeCartData();
-        getTotalPrice();
-    }, [])
+        if (boxProductChanged) {
+            setBoxProductChanged(false); // Reset the state variable after re-rendering
+        }
+    }, [boxProductChanged])
 
     return (
         <>
@@ -129,10 +138,10 @@ const SellingBox = () => {
                         backgroundColor: "#f8f8f8"
                     }}>
                         <div className={dashboardStyle.content}>
-                            <SellingBoxMainBoard boxItems={boxProduct} handleMinusQuantity={handleMinusQuantity}
-                                                 handleAddQuantity={handleAddQuantity}
+                            <SellingBoxMainBoard boxItems={boxProduct}
                                                  handleSellSubmission={handleSellSubmission}
-                                                 totalPrice={totalPrice}
+                                                 deleteItem={deleteItem}
+                                                 onHandleWrittenQuantity={onHandleWrittenQuantity}
                             />
                         </div>
                     </div>

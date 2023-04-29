@@ -33,7 +33,7 @@ def cart_view(request):
 
         if product.quantity >= quantity:
             # Check if the item already exists in the cart
-            cart_item = CartItemModel.objects.filter(product=product, seller=seller).first()
+            cart_item = CartItemModel.objects.filter(product=product, seller=seller, sold=False).first()
 
             if cart_item:
                 # Update the quantity of the existing cart item
@@ -50,9 +50,9 @@ def cart_view(request):
             # Update the product quantity
             product.quantity -= quantity
             product.save()
-            return Response({'success': f"`{product.name}` has been added to the box"}, status=status.HTTP_201_CREATED)
+            return Response({'message': f"`{product.name}` has been added to the box"}, status=status.HTTP_201_CREATED)
         else:
-            return Response({'Failed': "Inefficient Quantity"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'message': "Inefficient Quantity"}, status=status.HTTP_204_NO_CONTENT)
 
 
 class CartListAPIView(ListAPIView):
@@ -131,3 +131,10 @@ def order_view(request):
 class StockAlertListAPIView(ListAPIView):
     serializer_class = StockAlertSerializer
     queryset = StockAlertModel.objects.all()
+
+
+class CustomerProfileListAPIView(generics.ListAPIView):
+    serializer_class = CustomerProfileSerializer
+    queryset = CustomerProfile.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+

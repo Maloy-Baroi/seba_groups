@@ -5,16 +5,13 @@ import dashboardStyle from "@/styles/dashboard.module.css";
 import ProductsMainBoard from "@/pages/seller/components/ProductsMainBoard";
 import {useEffect, useState} from "react";
 import OnlyHead from "@/pages/seller/components/OnlyHead";
+import {onHandleCartLength} from "@/pages/api/apis";
 
 const Products = () => {
     const [cartLength, setCartLength] = useState(0);
-    const onHandleCartLength = () => {
-        const sellcart = JSON.parse(localStorage.getItem('sellcard') || '[]');
-        setCartLength(sellcart.length);
-    }
 
     useEffect(() => {
-        onHandleCartLength();
+        onHandleCartLength().then(r => setCartLength(r.length));
     }, [])
 
     return (
@@ -30,7 +27,7 @@ const Products = () => {
                         backgroundColor: "#f8f8f8"
                     }}>
                         <div className={dashboardStyle.content}>
-                            <ProductsMainBoard onHandleCartLength={onHandleCartLength} />
+                            <ProductsMainBoard />
                         </div>
                     </div>
                 </div>

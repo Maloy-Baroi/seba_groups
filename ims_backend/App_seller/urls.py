@@ -9,4 +9,5 @@ urlpatterns = [
     path('cart-delete/', cart_delete, name='cart-delete'),
     path('order/', order_view, name='order-view'),
     path('stock-alerts/', StockAlertListAPIView.as_view(), name='stock-alerts'),
+    path('customer-profiles/', CustomerProfileListAPIView.as_view(), name='customer-profiles')
 ]

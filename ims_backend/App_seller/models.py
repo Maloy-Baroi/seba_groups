@@ -33,6 +33,9 @@ class CustomerProfile(models.Model):
     name = models.CharField(max_length=200)
     phone_number = models.CharField(max_length=17, unique=True)
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class CartItemModel(models.Model):
     seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -44,6 +47,16 @@ class CartItemModel(models.Model):
 
     def get_total(self):
         return self.product.minimum_selling_price * self.quantity
+    
+    def get_product_name(self):
+        return self.product.name
+    
+
+    def get_product_strength(self):
+        return self.product.unit
+    
+    def get_total_quantity(self):
+        return self.product.quantity
 
 
 class OrderModel(models.Model):

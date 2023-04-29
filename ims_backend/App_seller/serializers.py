@@ -25,18 +25,25 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItemModel
-        fields = ['get_total', 
+        fields = ['id',
                   'seller',
                   'product',
                   'quantity',
                   'created_at',
                   'updated_at',
                   'sold',
+                  'get_total',
+                  'get_product_name',
+                  'get_product_strength',
+                  'get_total_quantity',
                   ]
         
-        # extra_kwargs = {
-        #     "get_total": {'read_only', True}
-        # }
+        extra_kwargs = {
+            'get_total': {'read_only': True},
+            'get_product_name': {'read_only': True},
+            'get_product_strength': {'read_only': True},
+            'get_total_quantity': {'read_only': True}
+        }
 
 
 class OrderSerializer(serializers.ModelSerializer):
