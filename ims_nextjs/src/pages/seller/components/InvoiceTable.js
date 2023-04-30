@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import InvoiceStyle from "@/styles/sellBox.module.css"
 import {useRouter} from "next/router";
-import {getOrderListForLoginUser} from "@/pages/api/app_products";
+import {getAllOrders, getOrderListForLoginUser} from "@/pages/api/app_products";
 
 const InvoiceTable = () => {
     const [orders, setOrders] = useState([])
     const [searchItem, setSearchItem] = useState("")
+    const [user_type, setUserType] = useState("")
 
     const navigator = useRouter()
 
@@ -13,6 +14,12 @@ const InvoiceTable = () => {
         const ordersList = await getOrderListForLoginUser();
         console.log(ordersList);
         setOrders(ordersList);
+    }
+
+    const fetchAllOrderData = async () => {
+        const orderList = await getAllOrders();
+        console.log(orderList)
+        setOrders(orderList);
     }
 
     function formatDate(date) {
@@ -48,7 +55,13 @@ const InvoiceTable = () => {
     );
 
     useEffect(() => {
-        fetchOrderData()
+        const userType = localStorage.getItem("group");
+        setUserType(userType)
+        if (userType === 'manager') {
+            fetchAllOrderData().then(r => true)
+        } else {
+            fetchOrderData().then(r => true)
+        }
     }, [])
 
     return (
@@ -70,12 +83,29 @@ const InvoiceTable = () => {
                     <div className={"col-md-2"}>
                         Order ID
                     </div>
-                    <div className={"col-md-3"}>
-                        Date
-                    </div>
-                    <div className={"col-md-3"}>
-                        Customer
-                    </div>
+                    {user_type === "manager"
+                        ?
+                        <>
+                            <div className={"col-md-2"}>
+                                Date
+                            </div>
+                            <div className={"col-md-2"}>
+                                Customer
+                            </div>
+                            <div className={"col-md-2"}>
+                                Seller Name
+                            </div>
+                        </>
+                        :
+                        <>
+                            <div className={"col-md-3"}>
+                                Date
+                            </div>
+                            <div className={"col-md-3"}>
+                                Customer
+                            </div>
+                        </>
+                    }
                     <div className={"col-md-3"}>
                         Payment Method
                     </div>
@@ -101,17 +131,35 @@ const InvoiceTable = () => {
                                 <div className={"col-md-2"}>
                                     sebaoid-{item.id}
                                 </div>
-                                <div className={"col-md-3"}>
-                                    {formattedDate}, {formattedTime}
-                                </div>
-                                <div className={"col-md-3"}>
-                                    {item.get_customer_name}
-                                </div>
+                                {user_type === "manager"
+                                    ?
+                                    <>
+                                        <div className={"col-md-2"}>
+                                            {formattedDate}, {formattedTime}
+                                        </div>
+                                        <div className={"col-md-2"}>
+                                            {item.get_customer_name}
+                                        </div>
+                                        <div className={"col-md-2"}>
+                                            {item.get_seller_name}
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div className={"col-md-3"}>
+                                            {formattedDate}, {formattedTime}
+                                        </div>
+                                        <div className={"col-md-3"}>
+                                            {item.get_customer_name}
+                                        </div>
+                                    </>
+                                }
                                 <div className={"col-md-3"}>
                                     {item.payment_method}
                                 </div>
                                 <div className={"col-md-1"}>
-                                    <button className={"btn btn-danger"} onClick={() => handlePrint(item.id)}>Print</button>
+                                    <button className={"btn btn-danger"} onClick={() => handlePrint(item.id)}>Print
+                                    </button>
                                 </div>
                             </div>
                         )

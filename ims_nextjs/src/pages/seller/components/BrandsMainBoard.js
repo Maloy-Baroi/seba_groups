@@ -3,6 +3,7 @@ import brandStyle from "@/styles/BrandsPage.module.css";
 import brandsTableStyle from "@/styles/brandTable.module.css";
 import {useEffect, useState} from "react";
 import {getBrandList, getCategoryList} from "@/pages/api/app_products";
+import AddNewHeaderInMainBoard from "@/pages/seller/components/AddNewHeaderInMainBoard";
 
 const BrandsMainBoard = () => {
     const [brands, setBrands] = useState([])
@@ -19,8 +20,7 @@ const BrandsMainBoard = () => {
         if (searchValue.length > 0) {
             const filteredBrands = brands.filter(cat => cat.name.toLowerCase().includes(searchValue.toLowerCase()));
             setBrands(filteredBrands);
-        }
-        else {
+        } else {
             fetchBrandList().then(r => true)
         }
     }
@@ -31,9 +31,8 @@ const BrandsMainBoard = () => {
 
     return (
         <>
-            <div className={"row"}>
-                <MainboardHead h4Text={"Brand List"} h6Text={"List of Medicine Company"}/>
-            </div>
+            <AddNewHeaderInMainBoard header4Text={"Company Name List"} header6Text={"List of Medicine Company"}
+                                     addingThing={"Brand"}/>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>
                     <div className="card-body">
@@ -67,7 +66,7 @@ const BrandsMainBoard = () => {
                                             <tbody>
                                             {brands.map((item, index) => (
                                                 <tr key={item.id}>
-                                                    <td data-label="Quantity Left">{index+1}</td>
+                                                    <td data-label="Quantity Left">{index + 1}</td>
                                                     <td data-label="Quantity Left">{item.name}</td>
                                                 </tr>
                                             ))}

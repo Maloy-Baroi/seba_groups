@@ -3,6 +3,7 @@ import productStyle from "@/styles/productsPage.module.css";
 import ShelfTableStyle from "@/styles/shelfPage.module.css";
 import {useEffect, useState} from "react";
 import {getShelfList} from "@/pages/api/app_products";
+import AddNewHeaderInMainBoard from "@/pages/seller/components/AddNewHeaderInMainBoard";
 
 const ShelfMainBoard = () => {
     const [shelvesList, setShelvesList] = useState([])
@@ -16,16 +17,14 @@ const ShelfMainBoard = () => {
 
     return (
         <>
-            <div className={"row"}>
-                <MainboardHead h4Text={"Shelves"} h6Text={"See all the shelves."}/>
-            </div>
+            <AddNewHeaderInMainBoard header4Text={"Shelves"} header6Text={"Manage all the shelves"}
+                                     addingThing={"Shelf"}/>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>
                     <div className="card-body">
                         <div>
                             <div className={"row mb-4"}>
                                 <div className={"col-md-8"}>
-
                                 </div>
                                 <div className={"col-md-4 " + productStyle.extraWork}>
 

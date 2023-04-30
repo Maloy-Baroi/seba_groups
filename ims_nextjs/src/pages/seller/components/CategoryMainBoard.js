@@ -4,6 +4,7 @@ import CreateProductForm from "@/pages/seller/components/CreateProductForm";
 import productsTableStyle from "@/styles/productTable.module.css";
 import {useEffect, useState} from "react";
 import {getCategoryList} from "@/pages/api/app_products";
+import AddNewHeaderInMainBoard from "@/pages/seller/components/AddNewHeaderInMainBoard";
 
 const CategoryMainBoard = () => {
     const [categories, setCategories] = useState([])
@@ -20,8 +21,7 @@ const CategoryMainBoard = () => {
         if (searchValue.length > 0) {
             const filteredCategories = categories.filter(cat => cat.name.toLowerCase().includes(searchValue.toLowerCase()));
             setCategories(filteredCategories);
-        }
-        else {
+        } else {
             fetchCategories().then(r => true)
         }
     }
@@ -32,9 +32,8 @@ const CategoryMainBoard = () => {
 
     return (
         <>
-            <div className={"row"}>
-                <MainboardHead h4Text={"Category List"} h6Text={"List of Generic Names"}/>
-            </div>
+            <AddNewHeaderInMainBoard header6Text={"List of Generic Names"} header4Text={"Generic Name List"}
+                                     addingThing={"Add new category"}/>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>
                     <div className="card-body">
@@ -69,7 +68,7 @@ const CategoryMainBoard = () => {
                                             <tbody>
                                             {categories.map((item, index) => (
                                                 <tr key={item.id}>
-                                                    <td data-label="Quantity Left">{index+1}</td>
+                                                    <td data-label="Quantity Left">{index + 1}</td>
                                                     <td data-label="Quantity Left">{item.name}</td>
                                                     <td data-label="Quantity Left">{item.Pharmacology}</td>
                                                 </tr>

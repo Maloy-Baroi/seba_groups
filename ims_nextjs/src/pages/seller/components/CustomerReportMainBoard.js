@@ -33,7 +33,7 @@ const CustomerReportMainBoard = () => {
     return (
         <>
             <div className={"row"}>
-                <MainboardHead h4Text={"Category List"} h6Text={"List of Generic Names"}/>
+                <MainboardHead h4Text={"Customer List"} h6Text={"List of Customers & Star Customers"}/>
             </div>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>

@@ -4,7 +4,7 @@ import LogoutButton from "@/pages/seller/components/LogoutButton";
 import {useEffect, useState} from "react";
 
 const Sidebar = (props) => {
-    const [userType, setUserType] = useState("")
+    const [userType, setUserType] = useState("seller")
 
     useEffect(() => {
         setUserType(localStorage.getItem('group'))
@@ -20,7 +20,7 @@ const Sidebar = (props) => {
                         </h6>
                         <ul className={sidebarStyle.sidebarNavUl}>
                             <li className={props.activeState === "dashboard" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/dashboard"}>
+                                <Link href={"/" + userType + "/dashboard"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -157,28 +157,34 @@ const Sidebar = (props) => {
                     <li className="submenu-open">
                         <h6 className="submenu-hdr">- Reports</h6>
                         <ul className={sidebarStyle.sidebarNavUl}>
-                            <li className={props.activeState === "invoice-report" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/invoice-report"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                         strokeLinecap="round" strokeLinejoin="round"
-                                         className="feather feather-file">
-                                        <path
-                                            d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                                        <polyline points="13 2 13 9 20 9"></polyline>
-                                    </svg>
-                                    <span>Invoice Report</span></Link></li>
-                            {/*<li className={props.activeState === "sales-report" ? sidebarStyle.active : ""}>*/}
-                            {/*    <Link href={"/"+ userType + "/"}>*/}
-                            {/*        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"*/}
-                            {/*             viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"*/}
-                            {/*             strokeLinecap="round" strokeLinejoin="round"*/}
-                            {/*             className="feather feather-bar-chart-2">*/}
-                            {/*            <line x1="18" y1="20" x2="18" y2="10"></line>*/}
-                            {/*            <line x1="12" y1="20" x2="12" y2="4"></line>*/}
-                            {/*            <line x1="6" y1="20" x2="6" y2="14"></line>*/}
-                            {/*        </svg>*/}
-                            {/*        <span>Sales Report</span></Link></li>*/}
+                            {
+                                userType === 'manager'
+                                    ?
+                                    <li className={props.activeState === "sales-report" ? sidebarStyle.active : ""}>
+                                        <Link href={"/"+ userType + "/sales-report"}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                                 strokeLinecap="round" strokeLinejoin="round"
+                                                 className="feather feather-bar-chart-2">
+                                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                                            </svg>
+                                            <span>Sales Report</span></Link>
+                                    </li>
+                                    :
+                                    <li className={props.activeState === "invoice-report" ? sidebarStyle.active : ""}>
+                                        <Link href={"/"+ userType + "/invoice-report"}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                                 strokeLinecap="round" strokeLinejoin="round"
+                                                 className="feather feather-file">
+                                                <path
+                                                    d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                                <polyline points="13 2 13 9 20 9"></polyline>
+                                            </svg>
+                                            <span>Invoice Report</span></Link></li>
+                            }
                             <li className={props.activeState === "inventory-report" ? sidebarStyle.active : ""}>
                                 <Link href={"/"+ userType + "/inventory-report"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"

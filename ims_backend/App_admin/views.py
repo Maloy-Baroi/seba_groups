@@ -13,6 +13,7 @@ from App_login.serializers import UserSerializers
 from App_products.models import *
 from App_products.serializers import *
 from App_seller.models import *
+from App_seller.serializers import OrderSerializer
 
 
 # Create your views here.
@@ -52,6 +53,8 @@ class SellerListAPIView(generics.ListAPIView):
 
         return Response(seller_group_users.values(), status=status.HTTP_200_OK)
 
-        return Response(serializers.data, status=status.HTTP_302_FOUND)
 
-
+class OrderListAPIViewForManager(generics.ListAPIView):
+    queryset = OrderModel.objects.all().order_by('-created_at')
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]

@@ -3,6 +3,7 @@ import brandStyle from "@/styles/BrandsPage.module.css";
 import brandsTableStyle from "@/styles/brandTable.module.css";
 import {useEffect, useState} from "react";
 import {getBrandList, getSubCategoryList} from "@/pages/api/app_products";
+import AddNewHeaderInMainBoard from "@/pages/seller/components/AddNewHeaderInMainBoard";
 
 const SubCategoryMainBoard = () => {
     const [subCategory, setSubCategory] = useState([])
@@ -31,9 +32,8 @@ const SubCategoryMainBoard = () => {
 
     return (
         <>
-            <div className={"row"}>
-                <MainboardHead h4Text={"Sub Category List"} h6Text={"Manage your sub-category"}/>
-            </div>
+            <AddNewHeaderInMainBoard header6Text={"List of Sub Category"} header4Text={"Specialized List"}
+                                     addingThing={"Add new sub-category"}/>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>
                     <div className="card-body">

@@ -30,6 +30,8 @@ const CreateProductForm = () => {
     const [categorySearchText, setCategorySearchText] = useState("");
     const [subCategorySearchText, setSubCategorySearchText] = useState("");
     const [brandSearchText, setBrandSearchText] = useState("");
+    const [imported, setImported] = useState(false)
+    const [importer, setImporter] = useState("")
 
     const navigator = useRouter()
 
@@ -160,6 +162,12 @@ const CreateProductForm = () => {
             bought_price: buyingPrice,
             description: description_ ? description_ : "No details"
         }
+
+        if (imported) {
+            requestBody.importer = importer;
+            requestBody.imported = true;
+        }
+
         fetch('http://127.0.0.1:8000/api-product/products/', {
             method: 'POST',
             headers: {
@@ -375,9 +383,24 @@ const CreateProductForm = () => {
                         </div>
                     </div>
                     <div className={"row"}>
-                        <div className={"col-md-12"}>
-                            <input type={"checkbox"} onClick={e => setStatus(true)}/> <label>status</label>
+                        <div className="col-md-6">
+                            <input type="checkbox" value={imported} onClick={e => setImported(!imported)}/>
+                            <label>&nbsp; Imported?</label>
                         </div>
+                        <div className="col-md-6">
+                            {imported && (
+                                <div className={"form-group " + productFormStyle.formGroup}>
+                                    <label>Importer</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={importer}
+                                        onChange={(event) => setImporter(event.target.value)}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
                     </div>
                     <div className={"row"}>
                         <div className={"col-md-12"}>

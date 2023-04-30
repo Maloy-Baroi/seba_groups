@@ -18,6 +18,10 @@ export async function getOrderListForLoginUser() {
     return await callApi('api-seller/order-list/')
 }
 
+export async function getAllOrders() {
+    return await callApi('api-admin/order-list-for-manager/')
+}
+
 export async function getCustomerReport() {
     return await callApi('api-seller/customer-report')
 }

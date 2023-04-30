@@ -73,6 +73,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "updated_at",
             "get_customer_name",
             "get_customer_phone",
+            "get_seller_name"
         ]
 
     def create(self, validated_data):

@@ -80,6 +80,9 @@ class OrderModel(models.Model):
     def get_customer_phone(self):
         return self.customer.phone_number
 
+    def get_seller_name(self):
+        return f"{self.seller.first_name} {self.seller.last_name}"
+
 
 class StockAlertModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
