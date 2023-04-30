@@ -5,15 +5,59 @@ import productsTableStyle from "@/styles/productTable.module.css";
 import {useEffect, useState} from "react";
 import {getCategoryList} from "@/pages/api/app_products";
 import AddNewHeaderInMainBoard from "@/pages/seller/components/AddNewHeaderInMainBoard";
+import CustomToast from "@/pages/manager/components/CustomToast";
+import AddButton from "@/pages/manager/components/AddButton";
 
 const CategoryMainBoard = () => {
     const [categories, setCategories] = useState([])
-    const [searchItem, setSearchItem] = useState("");
+    const [searchItem, setSearchItem] = useState("")
+    const [formShow, setFormShow] = useState(false)
+    const [catName, setCatName] = useState("")
+    const [pharmacology, setPharmacology] = useState("")
+    const [toastShow, setToastShow] = useState(false)
 
     const fetchCategories = async () => {
         const allCategories = await getCategoryList();
         setCategories(allCategories);
     };
+
+    const onHandleShowForm = () => {
+        setFormShow(!formShow)
+    }
+
+    function showToast() {
+        setToastShow(!toastShow)
+        setTimeout(() => {
+            setToastShow(false);
+        }, 3000);
+    }
+
+    const onHandleAddNew = () => {
+        const brandData = {
+            name: catName,
+            Pharmacology: pharmacology
+        };
+
+        fetch('http://127.0.0.1:8000/api-admin/create-categories/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("access_token") // Replace YOUR_TOKEN_HERE with the actual bearer token
+            },
+            body: JSON.stringify(brandData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                showToast()
+                onHandleShowForm()
+                fetchCategories().then(r => true)
+            })
+            .catch(error => {
+                console.error('Error creating brand:', error);
+                // Handle the error
+            });
+    }
 
     const searchOption = (event) => {
         const searchValue = event.target.value;
@@ -32,8 +76,36 @@ const CategoryMainBoard = () => {
 
     return (
         <>
+            {toastShow ? <CustomToast message={"Successfully Added!"}/> : ""}
             <AddNewHeaderInMainBoard header6Text={"List of Generic Names"} header4Text={"Generic Name List"}
-                                     addingThing={"Add new category"}/>
+                                     addingThing={"Add new category"} onHandleShowForm={onHandleShowForm}/>
+            <div className={"row"} style={formShow ? {
+                display: "block",
+                marginBottom: "20px"
+            } : {
+                display: "none"
+            }
+            } id={"categoryFormID"}>
+                <div className="card" style={{width: "100%", marginLeft: "10px"}}>
+                    <div className="card-body">
+                        <legend>Add New</legend>
+                        <div className={"row"}>
+                            <div className={"col-md-10"}>
+                                <input type={"text"} className={"form-control mb-4"} placeholder={"Generic Name"}
+                                       value={catName} onChange={e => setCatName(e.target.value)}
+                                />
+                                <textarea className={"form-control mb-4"}
+                                          onChange={e => setPharmacology(e.target.value)}>{pharmacology}</textarea>
+                            </div>
+                        </div>
+                        <div className={"row"}>
+                            <div className={"col-md-10"}>
+                                <AddButton btnWidth={"100%"} buttonName={"Add"} onHandleAddNew={onHandleAddNew}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>
                     <div className="card-body">

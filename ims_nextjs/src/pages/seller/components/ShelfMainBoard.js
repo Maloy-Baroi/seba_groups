@@ -4,21 +4,104 @@ import ShelfTableStyle from "@/styles/shelfPage.module.css";
 import {useEffect, useState} from "react";
 import {getShelfList} from "@/pages/api/app_products";
 import AddNewHeaderInMainBoard from "@/pages/seller/components/AddNewHeaderInMainBoard";
+import AddButton from "@/pages/manager/components/AddButton";
 
 const ShelfMainBoard = () => {
     const [shelvesList, setShelvesList] = useState([])
+    const [formShow, setFormShow] = useState(false)
+    const [shelfNo, setShelfNo] = useState("")
+    const [rowNo, setRowNo] = useState("")
+    const [colNo, setColNo] = useState("")
+    const [toastShow, setToastShow] = useState(false)
 
-    useEffect(() => {
+    const onHandleShowForm = () => {
+        setFormShow(!formShow)
+    }
+
+    function showToast() {
+        setToastShow(!toastShow)
+        setTimeout(() => {
+            setToastShow(false);
+        }, 3000);
+    }
+
+    const onHandleAddNew = () => {
+        const brandData = {
+            number: shelfNo,
+            row: rowNo,
+            column: colNo
+        };
+
+        fetch('http://127.0.0.1:8000/api-admin/create-shelves/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("access_token") // Replace YOUR_TOKEN_HERE with the actual bearer token
+            },
+            body: JSON.stringify(brandData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                showToast()
+                onHandleShowForm()
+                fetchShelfList().then(r => true)
+            })
+            .catch(error => {
+                console.error('Error creating brand:', error);
+                // Handle the error
+            });
+    }
+
+    const fetchShelfList = () => {
         getShelfList().then(r => {
             setShelvesList(r);
-            console.log(r)
         })
+    }
+
+    useEffect(() => {
+        fetchShelfList()
     }, [])
 
     return (
         <>
             <AddNewHeaderInMainBoard header4Text={"Shelves"} header6Text={"Manage all the shelves"}
-                                     addingThing={"Shelf"}/>
+                                     addingThing={"Shelf"} onHandleShowForm={onHandleShowForm} />
+            <div className={"row"} style={formShow ? {
+                display: "block",
+                marginBottom: "20px"
+            } : {
+                display: "none"
+            }
+            } id={"companyFormID"}>
+                <div className="card" style={{width: "100%", marginLeft: "10px"}}>
+                    <div className="card-body">
+                        <legend>Add New</legend>
+                        <div className={"row"}>
+                            <div className={"col-md-4"}>
+                                <input type={"text"} className={"form-control"} placeholder={"Shelf No."}
+                                       value={shelfNo} onChange={e => setShelfNo(e.target.value)}
+                                />
+                            </div>
+                            <div className={"col-md-4"}>
+                                <input type={"text"} className={"form-control"} placeholder={"Row No."}
+                                       value={rowNo} onChange={e => setRowNo(e.target.value)}
+                                />
+                            </div>
+                            <div className={"col-md-4"}>
+                                <input type={"text"} className={"form-control"} placeholder={"Column No."}
+                                       value={colNo} onChange={e => setColNo(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className={"row mt-3"}>
+                            <div className={"col-md-12"}>
+                                <AddButton btnWidth={"100%"} buttonName={"Add"} onHandleAddNew={onHandleAddNew} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>
                     <div className="card-body">

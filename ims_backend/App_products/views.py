@@ -115,11 +115,6 @@ class CategoryListAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class CreateCategoryView(generics.CreateAPIView):
-    serializer_class = CategorySerializer
-    queryset = Category.objects.all()
-
-
 class SubCategoryListAPIView(generics.ListAPIView):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
@@ -130,11 +125,6 @@ class BrandListAPIView(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-
-class CreateBrandAPIView(generics.CreateAPIView):
-    serializer_class = BrandSerializer
-    queryset = Brand.objects.all()
 
 
 class ShelfListAPIView(generics.ListAPIView):

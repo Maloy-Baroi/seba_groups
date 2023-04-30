@@ -58,3 +58,23 @@ class OrderListAPIViewForManager(generics.ListAPIView):
     queryset = OrderModel.objects.all().order_by('-created_at')
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class ShelfListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Shelf.objects.all()
+    serializer_class = ShelfSerializer
+
+
+class CreateBrandAPIView(generics.CreateAPIView):
+    serializer_class = BrandSerializer
+    queryset = Brand.objects.all()
+
+
+class SubCategoryListCreateAPIView(generics.ListCreateAPIView):
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
+
+
+class CreateCategoryView(generics.CreateAPIView):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()

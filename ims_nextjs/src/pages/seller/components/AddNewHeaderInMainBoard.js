@@ -1,7 +1,7 @@
 import MainboardHead from "@/pages/seller/components/MainboardHead";
 import {useEffect, useState} from "react";
 
-const AddNewHeaderInMainBoard = ({header4Text, header6Text, addingThing}) => {
+const AddNewHeaderInMainBoard = ({header4Text, header6Text, addingThing, onHandleShowForm}) => {
     const [userType, setUserType] = useState("")
 
     useEffect(() => {
@@ -18,7 +18,7 @@ const AddNewHeaderInMainBoard = ({header4Text, header6Text, addingThing}) => {
                     {userType === "manager"
                         ?
                         <div>
-                            <button className={"btn btn-success"}>Add New {addingThing}</button>
+                            <button className={"btn btn-success"} onClick={onHandleShowForm}>Add New {addingThing}</button>
                         </div>
                         : <div></div>
                     }
