@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {getShelfList} from "@/pages/api/app_products";
 import AddNewHeaderInMainBoard from "@/pages/seller/components/AddNewHeaderInMainBoard";
 import AddButton from "@/pages/manager/components/AddButton";
+import CustomToast from "@/pages/manager/components/CustomToast";
 
 const ShelfMainBoard = () => {
     const [shelvesList, setShelvesList] = useState([])
@@ -65,6 +66,7 @@ const ShelfMainBoard = () => {
 
     return (
         <>
+            {toastShow ? <CustomToast message={"Successfully Added!"} /> : ""}
             <AddNewHeaderInMainBoard header4Text={"Shelves"} header6Text={"Manage all the shelves"}
                                      addingThing={"Shelf"} onHandleShowForm={onHandleShowForm} />
             <div className={"row"} style={formShow ? {
