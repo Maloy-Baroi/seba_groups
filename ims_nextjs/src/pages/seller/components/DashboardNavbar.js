@@ -3,6 +3,7 @@ import Link from "next/link";
 import {useEffect, useState} from "react";
 import {onHandleCartLength} from "@/pages/api/apis";
 import {getAlmostExpiryProductsList, getNearToExpiredDate, getStockAlert} from "@/pages/api/app_products";
+import LogoManagement from "@/pages/component/LogoManagement";
 
 const DashboardNavbar = () => {
     const [cartLength, setCartLength] = useState(0);
@@ -32,7 +33,9 @@ const DashboardNavbar = () => {
         <>
             <nav className={"navbar navbar-expand-lg bg-white " + navStyle.bottomShadow}>
                 <div className={"container-fluid " + navStyle.navContainer}>
-                    <Link className="navbar-brand" href={"/"}>Seba Pharmacy</Link>
+                    <Link className="navbar-brand" href={"/"}>
+                        <LogoManagement />
+                    </Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">

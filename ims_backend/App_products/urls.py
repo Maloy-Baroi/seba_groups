@@ -13,4 +13,5 @@ urlpatterns = [
     path('sub-categories/', SubCategoryListAPIView.as_view(), name="sub-categories"),
     path('brand/', BrandListAPIView.as_view(), name="brand"),
     path('all-shelf/', ShelfListAPIView.as_view(), name="all-shelf"),
+    path('product-consumption-types/', ProductConsumptionTypeAPIView.as_view(), name='product_consumption_types'),
 ]

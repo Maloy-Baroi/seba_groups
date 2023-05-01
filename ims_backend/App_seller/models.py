@@ -8,14 +8,14 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 class SalesmanProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    employee_id = models.CharField(max_length=10)
-    nid = models.CharField(max_length=17)
+    employee_id = models.CharField(max_length=10, unique=True)
+    nid = models.CharField(max_length=17, unique=True)
     photo = models.ImageField(upload_to='profile_photos/')
     NID_front_photo = models.ImageField(upload_to='nid_photo/')
     NID_back_photo = models.ImageField(upload_to='nid_photo/')
     permanent_address = models.CharField(max_length=255)
     present_address = models.CharField(max_length=255)
-    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    salary = models.DecimalField(max_digits=10, decimal_places=2, default=1)
     personal_contact = models.CharField(max_length=20)
     emergency_contact = models.CharField(max_length=20)
     is_active = models.BooleanField(default=True)
@@ -23,6 +23,17 @@ class SalesmanProfile(models.Model):
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name + "'s Profile"
+
+    def save(self, *args, **kwargs):
+        if not self.employee_id:
+            # Generate the employee ID if it's not already set
+            self.employee_id = self.generate_employee_id()
+
+        super().save(*args, **kwargs)
+
+    def generate_employee_id(self):
+        count = SalesmanProfile.objects.count()
+        return f"sps-{count + 1}"
 
 
 phone_regex = RegexValidator(

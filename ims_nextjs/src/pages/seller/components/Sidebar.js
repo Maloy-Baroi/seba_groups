@@ -35,16 +35,14 @@ const Sidebar = (props) => {
                             {userType==='manager' ?
                                 <li className={props.activeState === "all-sellers" ? sidebarStyle.active : ""}>
                                     <Link href={"/"+ userType + "/all-sellers"}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                             strokeLinecap="round" strokeLinejoin="round"
-                                             className="feather feather-grid">
-                                            <rect x="3" y="3" width="7" height="7"></rect>
-                                            <rect x="14" y="3" width="7" height="7"></rect>
-                                            <rect x="14" y="14" width="7" height="7"></rect>
-                                            <rect x="3" y="14" width="7" height="7"></rect>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" className="bi bi-file-person" viewBox="0 0 16 16">
+                                            <path
+                                                d="M12 1a1 1 0 0 1 1 1v10.755S12 11 8 11s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/>
+                                            <path d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                                         </svg>
-                                        <span>All Sellers</span></Link>
+                                        <span>All Sellers</span>
+                                    </Link>
                                 </li>
                                 : ""}
                             <li className={"submenu " + props.activeState === "application" ? sidebarStyle.active : ""}>
@@ -221,8 +219,8 @@ const Sidebar = (props) => {
                     <li className="submenu-open">
                         <h6 className="submenu-hdr">- Settings</h6>
                         <ul className={sidebarStyle.sidebarNavUl}>
-                            <li className={"submenu " + props.activeState === "customer_report" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/"}>
+                            <li className={props.activeState === "settings" ? sidebarStyle.active : ""}>
+                                <Link href={"/"+ userType + "/settings"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"

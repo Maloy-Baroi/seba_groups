@@ -2,7 +2,6 @@ import Head from "next/head";
 import DashboardNavbar from "@/pages/seller/components/DashboardNavbar";
 import dashboardStyle from "@/styles/dashboard.module.css";
 import Sidebar from "@/pages/seller/components/Sidebar";
-import DashboardMainBoard from "@/pages/manager/components/DashboardMainBoard";
 import AllSellerDashboard from "@/pages/manager/components/AllSellerDashboard";
 
 const AllSellers = () => {

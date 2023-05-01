@@ -89,6 +89,7 @@ const login = () => {
                         <div className={"col-md-5 " + loginStyle.loginContainer}>
                             <div className={"m-2"}>
                                 <div className={loginStyle.logoNormal}>
+
                                     <h3>Inventory Management System</h3>
                                 </div>
                                 <div className={loginStyle.loginUserheading}>
@@ -127,7 +128,8 @@ const login = () => {
 
                                     <div className={loginStyle.formInputContainer}>
                                         <div className={loginStyle.homeButtonContainer}>
-                                            <button className={"btn " + loginStyle.homeButton}>
+                                            <button className={"btn " + loginStyle.homeButton}
+                                                    onClick={() => navigator.push('/')}>
                                                 Back to Home
                                             </button>
                                         </div>

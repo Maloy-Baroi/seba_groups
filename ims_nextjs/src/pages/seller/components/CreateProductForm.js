@@ -5,7 +5,7 @@ import {
     getExpiredProductsList,
     getCategoryList,
     getSubCategoryList,
-    getBrandList, getShelfList
+    getBrandList, getShelfList, getConsumptionTypeList
 } from "@/pages/api/app_products"
 import productFormStyle from "@/styles/productForm.module.css";
 import {useRouter} from "next/router";
@@ -14,6 +14,7 @@ const CreateProductForm = () => {
     const [p_name, setPName] = useState("")
     const [p_type, setPType] = useState("")
     const [strength, setStrength] = useState("")
+    const [allConsumptionType, setAllConsumptionType] = useState([])
     const [purchased_quantity, setPurchasedQuantity] = useState(1)
     const [minimumQuantity, setMinimumQuantity] = useState(1)
     const [minimumPrice, setMinimumPrice] = useState(1)
@@ -62,6 +63,11 @@ const CreateProductForm = () => {
             setAllShelf(allShelves);
         }
 
+        const fetchConsumptionType = async () => {
+            const allTypeOfConsumption = await getConsumptionTypeList();
+            setAllConsumptionType(allTypeOfConsumption);
+        };
+
         fetchProductNames().then(r => true);
         fetchCategories().then(r => true);
         fetchSubCategories().then(r => true);
@@ -69,6 +75,7 @@ const CreateProductForm = () => {
         fetchShelves().then(r => {
             console.log(allShelf)
         });
+        fetchConsumptionType().then(r => true)
     }, []);
 
     const filteredProductName = productNames.filter((prod) => {
@@ -295,14 +302,13 @@ const CreateProductForm = () => {
                                         }
                                         }>
                                     <option>Select type (capsule/table)</option>
-                                    <option>Tablet</option>
-                                    <option>Capsule</option>
-                                    <option>Syrup</option>
-                                    <option>Suppository</option>
-                                    <option>Drops</option>
-                                    <option>Inhalers</option>
-                                    <option>Injections</option>
-                                    <option>Implants or patches</option>
+                                    {
+                                        allConsumptionType.map((item, index) => {
+                                            return (
+                                                <option key={index}>{item.type_name}</option>
+                                            )
+                                        })
+                                    }
                                 </select>
                             </div>
                         </div>

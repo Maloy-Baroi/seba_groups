@@ -15,7 +15,6 @@ from App_products.serializers import ProductModelSerializer
 from .models import OrderModel, CustomerProfile
 from .serializers import *
 
-
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -25,7 +24,6 @@ from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from django.db.models import F
 from django.db.models import Sum
-
 
 
 @api_view(['POST'])
@@ -70,7 +68,6 @@ class CartListAPIView(ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return CartItemModel.objects.filter(seller=user, sold=False)
-        
 
 
 @api_view(['DELETE'])
@@ -99,7 +96,7 @@ def order_view(request):
         seller = request.user
         cart_items = CartItemModel.objects.filter(seller=seller, sold=False)
 
-        if len(cart_items)>0:
+        if len(cart_items) > 0:
             for item in cart_items:
                 if item.product.quantity <= item.product.minimum_alert_quantity:
                     StockAlertModel.objects.create(
@@ -107,7 +104,8 @@ def order_view(request):
                     )
 
             # Check if the customer already exists
-            customer, created = CustomerProfile.objects.get_or_create(phone_number=phone_number, defaults={'name': name})
+            customer, created = CustomerProfile.objects.get_or_create(phone_number=phone_number,
+                                                                      defaults={'name': name})
 
             # Calculate the total price
             total_price = sum(item.product.minimum_selling_price * item.quantity for item in cart_items)
@@ -159,22 +157,24 @@ class OrderListAPIView(ListAPIView):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+
 class SingleOrderAPIView(generics.RetrieveAPIView):
     queryset = OrderModel.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
     lookup_fields = 'id'
-    
+
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         lookup_value = self.kwargs.get(self.lookup_fields)
         obj = queryset.get(id=lookup_value)
         serializer = self.get_serializer(obj, many=False)
-        return Response(serializer.data, status = status.HTTP_306_RESERVED)
+        return Response(serializer.data, status=status.HTTP_306_RESERVED)
 
 
 class NearExpiryProductListView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request):
         # Calculate the threshold date for near expiry
         threshold_date = timezone.now() + timedelta(days=30)  # Adjust the number of days as needed
@@ -193,7 +193,6 @@ class LowStockProductAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         return ProductModel.objects.filter(quantity__lte=F('minimum_alert_quantity'))
-
 
 
 class PurchasedProductAPIListView(generics.ListAPIView):
@@ -219,3 +218,26 @@ class CustomerReportListAPIView(ListAPIView):
     serializer_class = CustomerProfileSerializer
     permission_classes = [IsAuthenticated]
 
+
+class SalesmanProfileAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = SalesmanProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.salesmanprofile
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
+
+class CreateSalesmanProfileAPIView(APIView):
+    def post(self, request, format=None):
+        serializer = SalesmanProfileSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            profile = serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)

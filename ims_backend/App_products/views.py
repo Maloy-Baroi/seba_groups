@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from App_products.models import *
 from App_products.serializers import *
 from App_seller.models import *
+import json
 
 
 # Create your views here.
@@ -131,3 +132,19 @@ class ShelfListAPIView(generics.ListAPIView):
     queryset = Shelf.objects.all()
     serializer_class = ShelfSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class ProductConsumptionTypeAPIView(generics.ListCreateAPIView):
+    queryset = ProductConsumptionTypeModel.objects.all()
+    serializer_class = ProductConsumptionTypeModelSerializers
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        name = request.data['type_name']
+        serializer = ProductConsumptionTypeModelSerializers(data={'type_name': name})
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"success": "Successfully saved", "data": serializer.data}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

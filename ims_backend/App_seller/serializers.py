@@ -4,16 +4,21 @@ from App_login.serializers import UserSerializers
 
 
 class SalesmanProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializers()
-    photo = serializers.ImageField()
-    NID_front_photo = serializers.ImageField()
-    NID_back_photo = serializers.ImageField()
-
     class Meta:
         model = SalesmanProfile
-        fields = ('id', 'user', 'employee_id', 'nid', 'photo', 'NID_front_photo',
-                  'NID_back_photo', 'permanent_address', 'present_address', 'salary',
-                  'personal_contact', 'emergency_contact', 'is_active')
+        fields = ['employee_id', 'nid', 'photo', 'NID_front_photo', 'NID_back_photo', 'permanent_address',
+                  'present_address', 'salary', 'personal_contact', 'emergency_contact', 'is_active', 'joining_date']
+
+        extra_kwargs = {
+            "employee_id": {"read_only": True},
+            "salary": {"read_only": True},
+        }
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        profile = SalesmanProfile(user=user, **validated_data)
+        profile.save()
+        return profile
 
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
@@ -48,7 +53,7 @@ class CartItemSerializer(serializers.ModelSerializer):
                   'get_product_strength',
                   'get_total_quantity',
                   ]
-        
+
         extra_kwargs = {
             'get_total': {'read_only': True},
             'get_product_name': {'read_only': True},
@@ -84,6 +89,7 @@ class OrderSerializer(serializers.ModelSerializer):
             CartItemModel.objects.create(order=order, **item_data)
 
         return order
+
 
 class StockAlertSerializer(serializers.ModelSerializer):
     class Meta:

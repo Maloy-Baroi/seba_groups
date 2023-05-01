@@ -11,5 +11,5 @@ urlpatterns = [
     path('create-categories/', CreateCategoryView.as_view(), name="create-categories"),
     path('create-brand/', CreateBrandAPIView.as_view(), name="create-brand"),
     path('create-subcategories/', SubCategoryListCreateAPIView.as_view(), name='subcategory-list-create'),
-
+    path('manager-profile/', ShopManagerProfileAPIView.as_view(), name='manager_profile_api'),
 ]

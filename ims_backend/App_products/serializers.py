@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, SubCategory, Brand, Shelf, ProductModel
+from .models import Category, SubCategory, Brand, Shelf, ProductModel, ProductConsumptionTypeModel
 import re
 
 
@@ -31,12 +31,19 @@ class ShelfSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ProductConsumptionTypeModelSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = ProductConsumptionTypeModel
+        fields = ['type_name']
+
+
 # ProductModel Serializer
 class ProductModelSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source='get_category')
     sub_category = serializers.CharField(source='get_sub_category')
     brand = serializers.CharField(source='get_brand')
     shelf = serializers.CharField(source='get_shelf')
+    type = serializers.CharField(source='get_consumption_type')
 
     class Meta:
         model = ProductModel
@@ -47,6 +54,7 @@ class ProductModelSerializer(serializers.ModelSerializer):
         sub_category_name = validated_data.pop('get_sub_category')
         brand_name = validated_data.pop('get_brand')
         shelf_number = validated_data.pop('get_shelf')
+        consump_type = validated_data.pop('get_consumption_type')
 
         print(shelf_number)
 
@@ -66,12 +74,14 @@ class ProductModelSerializer(serializers.ModelSerializer):
         sub_category = SubCategory.objects.get(name=sub_category_name)
         brand = Brand.objects.get(name=brand_name)
         shelf = Shelf.objects.get(number=shelf_no, row=row_no, column=column_no)
+        type = ProductConsumptionTypeModel.objects.get(type_name=consump_type)
 
         product_model = ProductModel.objects.create(
             category=category,
             sub_category=sub_category,
             brand=brand,
             shelf=shelf,
+            type=type,
             **validated_data
         )
 

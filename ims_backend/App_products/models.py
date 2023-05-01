@@ -33,6 +33,13 @@ class Shelf(models.Model):
         return f"Shelf: {self.number}, Row: {self.row}, Column: {self.column}"
 
 
+class ProductConsumptionTypeModel(models.Model):
+    type_name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.type_name
+
+
 # Product Model
 class ProductModel(models.Model):
     barcode_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
@@ -41,7 +48,8 @@ class ProductModel(models.Model):
     bought_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     minimum_selling_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField()
-    type = models.CharField(max_length=255, default="Tablet")
+    type = models.ForeignKey(ProductConsumptionTypeModel, on_delete=models.DO_NOTHING, related_name="consumption_type",
+                             blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_name')  # Generic Name
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='sub_category_name')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='brand_name')
@@ -69,6 +77,9 @@ class ProductModel(models.Model):
 
     def get_sub_category(self):
         return self.sub_category.name
+
+    def get_consumption_type(self):
+        return self.type.type_name
 
     def get_shelf(self):
         if self.shelf:

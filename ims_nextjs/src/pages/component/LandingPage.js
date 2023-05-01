@@ -5,6 +5,7 @@ import image1 from '../../assets/image/landing_page_image/1_new.png';
 import image2 from '../../assets/image/landing_page_image/2_new.png';
 import image3 from '../../assets/image/landing_page_image/3_new.png';
 import image4 from '../../assets/image/landing_page_image/4_new.png';
+import LogoManagement from "@/pages/component/LogoManagement";
 
 export default function LandingPage() {
     return (
@@ -14,8 +15,8 @@ export default function LandingPage() {
             }}>
                 <nav className="navbar navbar-expand-lg navbar-light bg-white">
                     <div className={"container-fluid " + homeStyle.navContainer}>
-                        <Link className={"navbar-brand " + homeStyle.navBrand} href={"/"}>
-                            <b>Seba Pharmacy</b>
+                        <Link className={"navbar-brand"} href={"/"}>
+                            <LogoManagement />
                         </Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -50,21 +51,24 @@ export default function LandingPage() {
                                     track of their inventory levels, automate reordering, and generate detailed reports
                                     for better organization and efficiency.
                                 </p>
-                                <button className={"btn " + homeStyle.learnMoreBtn} data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button className={"btn " + homeStyle.learnMoreBtn} data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
                                     Learn To Use
                                 </button>
-                                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div className="modal fade" id="exampleModal" tabIndex="-1"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div className="modal-dialog modal-lg">
                                         <div className="modal-content">
                                             <div className="modal-header text-center">
                                                 <h5 className="modal-title" id="exampleModalLabel">How to use</h5>
-                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" className="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                             </div>
                                             <div className="modal-body">
                                                 <video controls={true} style={{
                                                     width: "100%"
                                                 }}>
-                                                    <source src="/howtodoit.mp4" type="video/mp4" />
+                                                    <source src="/howtodoit.mp4" type="video/mp4"/>
                                                     Your browser does not support the video tag.
                                                 </video>
                                             </div>

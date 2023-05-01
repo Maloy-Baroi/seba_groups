@@ -3,10 +3,19 @@ import brandStyle from "@/styles/BrandsPage.module.css";
 import brandsTableStyle from "@/styles/brandTable.module.css";
 import {getBrandList, getSellerList} from "@/pages/api/app_products";
 import {useEffect, useState} from "react";
+import AddNewHeaderInMainBoard from "@/pages/seller/components/AddNewHeaderInMainBoard";
+import AddButton from "@/pages/manager/components/AddButton";
+import CustomToast from "@/pages/manager/components/CustomToast";
 
 const AllSellerDashboard = () => {
     const [sellerList, setSellerList] = useState([])
     const [searchItem, setSearchItem] = useState("");
+    const [formShow, setFormShow] = useState(false)
+    const [toastShow, setToastShow] = useState(false)
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [email, setEmail] = useState("")
+    const [otpPassword, setOtpPassword] = useState("")
 
     const fetchSellerList = async () => {
         const allSeller = await getSellerList();
@@ -25,14 +34,101 @@ const AllSellerDashboard = () => {
         }
     }
 
+    const onHandleShowForm = () => {
+        setFormShow(!formShow)
+    }
+
+    const onHandleAddNew = () => {
+        var formdata = new FormData();
+        formdata.append("email", email);
+        formdata.append("password", otpPassword);
+        formdata.append("first_name", firstName);
+        formdata.append("last_name", lastName);
+        formdata.append("group_name", "seller");
+
+        var requestOptions = {
+            method: 'POST',
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api-auth/user/create/", requestOptions)
+            .then(response => response.text())
+            .then(result =>
+                {
+                    showToast()
+                    onHandleShowForm()
+                    setEmail("")
+                    setOtpPassword("")
+                    setFirstName("")
+                    setLastName("")
+                    fetchSellerList().then(r => true)
+                }
+            )
+            .catch(error => console.log('error', error));
+    }
+
+    function showToast() {
+        setToastShow(!toastShow)
+        setTimeout(() => {
+            setToastShow(false);
+        }, 3000);
+    }
+
     useEffect(() => {
         fetchSellerList().then(r => true)
     }, [])
 
     return (
         <>
-            <div className={"row"}>
-                <MainboardHead h4Text={"Seller List"} h6Text={"List of all the salesman"}/>
+            {toastShow ? <CustomToast message={"Successfully Added!"} /> : ""}
+            <AddNewHeaderInMainBoard header4Text={"Seller List"} header6Text={"List of all the salesman"}
+                                     addingThing={"Seller"} onHandleShowForm={onHandleShowForm}/>
+            <div className={"row"} style={formShow ? {
+                display: "block",
+                marginBottom: "20px"
+            } : {
+                display: "none"
+            }
+            } id={"companyFormID"}>
+                <div className="card" style={{width: "100%", marginLeft: "10px"}}>
+                    <div className="card-body">
+                        <legend>Add New</legend>
+                        <div className={"row mb-4"}>
+                            <div className={"col-md-6"}>
+                                <input type={"email"} className={"form-control"} placeholder={"Enter Email"}
+                                       value={email} onChange={e => setEmail(e.target.value)}
+                                />
+                            </div>
+                            <div className={"col-md-6"}>
+                                <input type={"text"} className={"form-control"} placeholder={"Enter Password"}
+                                       value={otpPassword} onChange={e => setOtpPassword(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className={"row mb-4"}>
+                            <div className={"col-md-6"}>
+                                <input type={"text"} className={"form-control"} placeholder={"First Name"}
+                                       value={firstName} onChange={e => setFirstName(e.target.value)}
+                                />
+                            </div>
+                            <div className={"col-md-6"}>
+                                <input type={"text"} className={"form-control"} placeholder={"Last Name"}
+                                       value={lastName} onChange={e => setLastName(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className={"row"}>
+                            <div className={"col-md-2"}>
+                            </div>
+                            <div className={"col-md-8"}>
+                                <AddButton btnWidth={"100%"} buttonName={"Add"} onHandleAddNew={onHandleAddNew} />
+                            </div>
+                            <div className={"col-md-2"}>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className={"row"}>
                 <div className="card" style={{width: "100%", marginLeft: "10px"}}>

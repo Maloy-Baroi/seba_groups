@@ -16,4 +16,7 @@ urlpatterns = [
     path('stock-less-than-minimum-quantity/', LowStockProductAPIView.as_view(), name='stock-less-than-minimum-quantity'),
     path('purchased-products/', PurchasedProductAPIListView.as_view(), name='product-list'),
     path('customer-report/', CustomerReportListAPIView.as_view(), name='customer-report'),
+    path('salesman-profile/', SalesmanProfileAPIView.as_view(), name='salesman-profile'),
+    path('salesman-profile-create/', CreateSalesmanProfileAPIView.as_view(), name='salesman-profile-create'),
+
 ]

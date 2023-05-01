@@ -30,6 +30,10 @@ export async function getSubCategoryList() {
     return await callApi('api-product/sub-categories/');
 }
 
+export async function getConsumptionTypeList() {
+    return await callApi('api-product/product-consumption-types/');
+}
+
 export async function getBrandList() {
     return await callApi('api-product/brand/');
 }
@@ -57,4 +61,5 @@ export async function getCustomerSellerInvoiceCount() {
 export async function getSellerList() {
     return await callApi('api-admin/seller-list/')
 }
+
 

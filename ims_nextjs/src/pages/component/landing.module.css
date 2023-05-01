@@ -6,11 +6,6 @@
     margin: 30px 100px;
 }
 
-.navBrand {
-    font-weight: 600;
-    color: #020257;
-}
-
 .navUl li a {
     padding: 6px 12px !important;
 }
