@@ -5,6 +5,7 @@ import Sidebar from "@/pages/seller/components/Sidebar";
 import BrandsMainBoard from "@/pages/seller/components/BrandsMainBoard";
 
 const Brands = () => {
+
     return (
         <>
             <OnlyHead page={"Category"} />

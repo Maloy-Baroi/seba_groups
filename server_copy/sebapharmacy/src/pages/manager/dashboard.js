@@ -13,7 +13,7 @@ const Dashboard = () => {
         const accessToken = localStorage.getItem("access_token");
         if (!accessToken) {
             // eslint-disable-next-line react-hooks/exhaustive-deps
-            navigator.push('/login/')
+            navigator.push('login/')
         }
     }, [])
 

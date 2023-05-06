@@ -136,7 +136,7 @@ const ProductsTable = (props) => {
                                         }
                                     </tr>
                                 ))
-                                : ""
+                                : <tr></tr>
                             }
                             </tbody>
                         </table>

@@ -82,7 +82,7 @@ const CreateProductForm = () => {
         })
             .then(response => response.json())
             .then(data =>
-                navigator.push('/seller/products')
+                navigator.push('seller/products')
             )
             .catch(error => console.error(error))
     }
@@ -237,7 +237,7 @@ const CreateProductForm = () => {
                                         onChange={e => setShelfNumber(e.target.value)}>
                                     <option>select shelf</option>
                                     {
-                                        allShelf.length > 0?
+                                        allShelf && allShelf.length > 0?
                                         allShelf.map((shelf) => (
                                             <option key={shelf.id}>
                                                 Shelf: {shelf.number} Row: {shelf.row} Column: {shelf.column}

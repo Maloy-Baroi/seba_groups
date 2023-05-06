@@ -13,7 +13,6 @@ const CategoryMainBoard = () => {
     const [searchItem, setSearchItem] = useState("")
     const [formShow, setFormShow] = useState(false)
     const [catName, setCatName] = useState("")
-    const [pharmacology, setPharmacology] = useState("")
     const [toastShow, setToastShow] = useState(false)
 
     const fetchCategories = async () => {
@@ -34,8 +33,7 @@ const CategoryMainBoard = () => {
 
     const onHandleAddNew = () => {
         const brandData = {
-            name: catName,
-            Pharmacology: pharmacology
+            name: catName
         };
 
         fetch('https://seba-backend.xyz/api-admin/create-categories/', {
@@ -62,7 +60,7 @@ const CategoryMainBoard = () => {
     const searchOption = (event) => {
         const searchValue = event.target.value;
         setSearchItem(searchValue);
-        if (searchValue.length > 0) {
+        if (searchValue && searchValue.length > 0) {
             const filteredCategories = categories.filter(cat => cat.name.toLowerCase().includes(searchValue.toLowerCase()));
             setCategories(filteredCategories);
         } else {
@@ -94,8 +92,6 @@ const CategoryMainBoard = () => {
                                 <input type={"text"} className={"form-control mb-4"} placeholder={"Generic Name"}
                                        value={catName} onChange={e => setCatName(e.target.value)}
                                 />
-                                <textarea className={"form-control mb-4"}
-                                          onChange={e => setPharmacology(e.target.value)}>{pharmacology}</textarea>
                             </div>
                         </div>
                         <div className={"row"}>
@@ -138,14 +134,14 @@ const CategoryMainBoard = () => {
                                             </thead>
                                             <tbody>
                                             {
-                                                categories.length > 0 ?
+                                                categories && categories.length > 0 ?
                                                 categories.map((item, index) => (
                                                     <tr key={item.id}>
                                                         <td data-label="S.N.">{index + 1}</td>
                                                         <td data-label="Generic Name">{item.name}</td>
                                                     </tr>
                                                 ))
-                                                : ""
+                                                : <tr></tr>
                                             }
                                             </tbody>
                                         </table>

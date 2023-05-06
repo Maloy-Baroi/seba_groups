@@ -16,11 +16,11 @@ export default function Home() {
         if (access_token) {
             if (group === "seller") {
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-                navigator.push('/seller/dashboard')
+                navigator.push('seller/dashboard')
             }
             else if (group === "manager") {
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-                navigator.push('/manager/dashboard')
+                navigator.push('manager/dashboard')
             }
         }
     })

@@ -88,7 +88,7 @@ const ProductsTable = ({searchValue}) => {
                                         </td>
                                     </tr>
                                 ))
-                                : ""
+                                : <tr></tr>
                             }
                             </tbody>
                         </table>

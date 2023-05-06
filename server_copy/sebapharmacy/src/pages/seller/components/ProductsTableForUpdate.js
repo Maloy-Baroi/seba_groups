@@ -26,12 +26,11 @@ const ProductsTableForUpdate = ({searchValue, onStartUpdate, changeKey}) => {
             fetch("https://seba-backend.xyz/api-product/all-products-list/", requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result)
                     setProducts(result)
                 })
                 .catch(error => console.log('error', error));
         }
-    }, [searchValue, searchOption, reloadTable])
+    }, [reloadTable])
 
     const onHandle = (id) => {
         onHandleUpdate()
@@ -94,7 +93,7 @@ const ProductsTableForUpdate = ({searchValue, onStartUpdate, changeKey}) => {
                                         </td>
                                     </tr>
                                 ))
-                                : ""
+                                : <tr></tr>
                             }
                             </tbody>
                         </table>

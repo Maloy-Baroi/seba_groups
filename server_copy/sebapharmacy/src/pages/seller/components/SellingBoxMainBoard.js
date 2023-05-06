@@ -10,12 +10,12 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
     const [customerProfiles, setCustomerProfiles] = useState([])
 
     const getTotalPrice = () => {
-        let total = 0
-        boxItems.length > 0 ? 
-            boxItems.map((item) => {
-                total += item.get_total;
-            })
-        : "";
+        let total = 0;
+        boxItems ? boxItems.length > 0 ? 
+        boxItems.map((item) => {
+            total += item.get_total;
+        })
+    : total=0 : "" ;
         return total.toFixed(2);
     }
 
@@ -39,7 +39,7 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
 
     const CustomerFilter = (searchValue) => {
         const filteredProducts = customerProfiles.filter(profile => profile.name.toLowerCase().includes(searchValue.toLowerCase()));
-        setProducts(filteredProducts);
+        setCustomerProfiles(filteredProducts);
     }
 
     useEffect(() => {
@@ -100,7 +100,7 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
                                 </div>
                                 <hr/>
                                 {
-                                    boxItems.length > 0 ?
+                                    boxItems && boxItems.length > 0 ?
                                     boxItems.map((item) => (
                                         <div key={item.id}>
                                             <div className={"row text-center mb-2 mt-2 " + sellingBoxStyle.tabRow}>
@@ -177,7 +177,7 @@ const SellingBoxMainBoard = ({boxItems, handleSellSubmission, deleteItem, onHand
             <div className={"row"}>
                 <div className={"col-md-4"}>
                     <div className={"mt-4"}>
-                        {customerName && customerPhn && boxItems.length > 0 ?
+                        {customerName && customerPhn && boxItems && boxItems.length > 0 ?
                             <button className={"btn btn-danger btn-md w-75"}
                                     onClick={() => handleSellSubmission(customerName, customerPhn, paymentMethod)}>
                                 Sell

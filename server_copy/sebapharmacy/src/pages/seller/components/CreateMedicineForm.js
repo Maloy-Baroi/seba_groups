@@ -211,7 +211,7 @@ const CreateMedicineForm = () => {
                                        value={
                                            p_name ?
                                                p_name :
-                                               shouldDisplaySpecialisedForID()
+                                               ""
                                        }
                                        onChange={handleProductNameInputChange} placeholder={"Medicine Name"}/>
                                 <ul id={"productNamesID"} style={
@@ -221,7 +221,7 @@ const CreateMedicineForm = () => {
                                 }
                                 >
                                     {
-                                        filteredProductName.length > 0 ?
+                                        filteredProductName && filteredProductName.length > 0 ?
                                         filteredProductName.map((prodName) => (
                                             <li key={prodName.id}
                                                 onClick={() => handleProductNameSelect(prodName.product_name, prodName.strength, prodName.type, prodName.generics, prodName.company)}
@@ -248,7 +248,7 @@ const CreateMedicineForm = () => {
                                 }
                                 >
                                     {
-                                        filteredCategories.length > 0 ?
+                                        filteredCategories && filteredCategories.length > 0 ?
                                         filteredCategories.map((category) => (
                                         <li key={category.id} onClick={() => handleCategorySelect(category.name)}
                                             style={{
@@ -274,7 +274,7 @@ const CreateMedicineForm = () => {
                                 }
                                 >
                                     {
-                                        filteredSubCategories.length > 0 ?
+                                        filteredSubCategories && filteredSubCategories.length > 0 ?
                                         filteredSubCategories.map((sub_category) => (
                                             <li key={sub_category.id}
                                                 onClick={() => handleSubCategorySelect(sub_category.name)} style={{
@@ -300,7 +300,7 @@ const CreateMedicineForm = () => {
                                 }
                                 >
                                     {
-                                        filteredBrand.length>0 ?
+                                        filteredBrand && filteredBrand.length>0 ?
                                         filteredBrand.map((brand_) => (
                                             <li key={brand_.id} onClick={() => handleBrandSelect(brand_.name)} style={{
                                                 cursor: "pointer"
@@ -325,7 +325,7 @@ const CreateMedicineForm = () => {
                                         }>
                                     <option>Select type (capsule/table)</option>
                                     {
-                                        allConsumptionType.length > 0 ? 
+                                        allConsumptionType && allConsumptionType.length > 0 ? 
                                         allConsumptionType.map((item, index) => {
                                             return (
                                                 <option key={index}>{item.type_name}</option>

@@ -26,7 +26,7 @@ const MedicinesTable = (props) => {
             fetchProduct().then(r => console.log(r))
             setUserType(localStorage.getItem('group'))
         }
-    }, [props.searchValue, searchOption])
+    }, [props.searchValue])
 
     const onHandleAddToBox = async (id) => {
         var myHeaders = new Headers();
@@ -85,7 +85,7 @@ const MedicinesTable = (props) => {
                                 <th scope="col">Price</th>
                                 {userType === "seller" ?
                                     <th scope="col">Sell</th>
-                                    : ""}
+                                    : <th></th>}
                             </tr>
                             </thead>
                             <tbody>
@@ -126,11 +126,11 @@ const MedicinesTable = (props) => {
                                                     </button>
                                                 </div>
                                             </td>
-                                            : ""
+                                            : <td></td>
                                         }
                                     </tr>
                                 ))
-                                : ""
+                                : <tr></tr>
                             }
                             </tbody>
                         </table>

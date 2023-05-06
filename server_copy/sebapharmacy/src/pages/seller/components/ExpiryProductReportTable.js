@@ -80,7 +80,7 @@ const ExpiryProductReportTable = () => {
                                     </td>
                                 </tr>
                             ))
-                            : ""
+                            : <tr></tr>
                         }
                             </tbody>
                         </table>

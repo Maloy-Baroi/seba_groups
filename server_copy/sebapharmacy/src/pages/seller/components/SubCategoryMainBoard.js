@@ -139,7 +139,7 @@ const SubCategoryMainBoard = () => {
                                                         <td data-label="Quantity Left">{item.name}</td>
                                                     </tr>
                                                 ))
-                                                : ""
+                                                : <tr></tr>
                                             }
                                             </tbody>
                                         </table>

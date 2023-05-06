@@ -50,7 +50,7 @@ const PageInvoice = () => {
     const onHandleSave = () => {
         print()
         window.onafterprint = () => {
-            navigator.push('/seller/products')
+            navigator.push('seller/products')
         };
     }
 

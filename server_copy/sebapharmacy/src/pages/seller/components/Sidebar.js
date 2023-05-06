@@ -2,17 +2,30 @@ import Link from "next/link";
 import sidebarStyle from "@/styles/sidebar.module.css";
 import LogoutButton from "@/pages/seller/components/LogoutButton";
 import {useEffect, useState} from "react";
+import { useToast } from "react-toastify";
 
 const Sidebar = (props) => {
-    const [userType, setUserType] = useState("seller")
+    const [userType, setUserType] = useState("");
+    const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        setUserType(localStorage.getItem('group'))
-    }, [])
+  useEffect(() => {
+    const group = localStorage.getItem('group');
+    if (group && group !== userType) {
+      setUserType(group);
+    }
+    setLoading(false)
+  }, [userType]);
 
     return (
         <>
-            <div id="sidebar-menu" className="sidebar-menu">
+            {
+                loading ?
+                (
+                    <div>Loading...</div>
+                )
+                :
+                (
+                    <div id="sidebar-menu" className="sidebar-menu">
                 <ul className={sidebarStyle.mainUl}>
                     <li className="submenu-open">
                         <h6 className="submenu-hdr">
@@ -34,7 +47,7 @@ const Sidebar = (props) => {
                             </li>
                             {userType==='manager' ?
                                 <li className={props.activeState === "all-sellers" ? sidebarStyle.active : ""}>
-                                    <Link href={"/"+ userType + "/all-sellers"}>
+                                    <Link href={"/" + userType + "/all-sellers"}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor" className="bi bi-file-person" viewBox="0 0 16 16">
                                             <path
@@ -46,7 +59,7 @@ const Sidebar = (props) => {
                                 </li>
                                 : ""}
                             <li className={"submenu " + props.activeState === "application" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/"}>
+                                <Link href={userType}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -62,7 +75,7 @@ const Sidebar = (props) => {
                         <h6 className="submenu-hdr">- Products</h6>
                         <ul className={sidebarStyle.sidebarNavUl}>
                             <li className={props.activeState === "all_medicines" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/medicines/"}>
+                                <Link href={`/${userType}/medicines`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -72,9 +85,10 @@ const Sidebar = (props) => {
                                         <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                                         <line x1="12" y1="22.08" x2="12" y2="12"></line>
                                     </svg>
-                                    <span>Medicines</span></Link></li>
+                                    <span>Medicines</span></Link>
+                                </li>
                             <li className={props.activeState === "all_products" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/products/"}>
+                                <Link href={"/" + userType +  "/products"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -86,7 +100,7 @@ const Sidebar = (props) => {
                                     </svg>
                                     <span>Products</span></Link></li>
                             <li className={props.activeState === "create_products" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/create-product/"}>
+                                <Link href={"/" + userType +  "/create-product"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -97,7 +111,7 @@ const Sidebar = (props) => {
                                     </svg>
                                     <span>Create Product</span></Link></li>
                             <li className={props.activeState === "update_products" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/update-product/"}>
+                                <Link href={"/" + userType +  "/update-product"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor"
                                          className="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -108,7 +122,7 @@ const Sidebar = (props) => {
                                     </svg>
                                     <span>Update Product</span></Link></li>
                             <li className={props.activeState === "shelves" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/shelves/"}>
+                                <Link href={"/" + userType +  "/shelves"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" className="bi bi-bookshelf" viewBox="0 0 16 16">
                                         <path
@@ -118,7 +132,7 @@ const Sidebar = (props) => {
                                 </Link>
                             </li>
                             <li className={props.activeState === "category" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/category/"}>
+                                <Link href={"/" + userType +  "/category"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" className="bi bi-border-center"
                                          viewBox="0 0 16 16">
@@ -128,7 +142,7 @@ const Sidebar = (props) => {
                                     <span>Category</span></Link>
                             </li>
                             <li className={props.activeState === "sub-category" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/sub-category/"}>
+                                <Link href={"/" + userType +  "/sub-category"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -140,7 +154,7 @@ const Sidebar = (props) => {
                                     <span>Sub Category</span></Link>
                             </li>
                             <li className={props.activeState === "brands" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/brands/"}>
+                                <Link href={"/" + userType +  "/brands"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -151,7 +165,7 @@ const Sidebar = (props) => {
                                     </svg>
                                     <span>Brands</span></Link></li>
                             <li className={props.activeState === "import-products" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/import-products/"}>
+                                <Link href={"/" + userType +  "/import-products"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -171,7 +185,7 @@ const Sidebar = (props) => {
                                 userType === 'manager'
                                     ?
                                     <li className={props.activeState === "sales-report" ? sidebarStyle.active : ""}>
-                                        <Link href={"/"+ userType + "/sales-report"}>
+                                        <Link href={"/" + userType +  "/sales-report"}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                                  strokeLinecap="round" strokeLinejoin="round"
@@ -184,7 +198,7 @@ const Sidebar = (props) => {
                                     </li>
                                     :
                                     <li className={props.activeState === "invoice-report" ? sidebarStyle.active : ""}>
-                                        <Link href={"/"+ userType + "/invoice-report"}>
+                                        <Link href={"/" + userType +  "/invoice-report"}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                                  strokeLinecap="round" strokeLinejoin="round"
@@ -196,7 +210,7 @@ const Sidebar = (props) => {
                                             <span>Invoice Report</span></Link></li>
                             }
                             <li className={props.activeState === "inventory-report" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/inventory-report"}>
+                                <Link href={"/" + userType +  "/inventory-report"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -206,7 +220,7 @@ const Sidebar = (props) => {
                                     </svg>
                                     <span>Inventory Report</span></Link></li>
                             <li className={props.activeState === "purchase-report" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/purchase-report"}>
+                                <Link href={"/" + userType +  "/purchase-report"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -217,7 +231,7 @@ const Sidebar = (props) => {
                                     </svg>
                                     <span>Purchase Report</span></Link></li>
                             <li className={props.activeState === "customer-report" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/customer-report"}>
+                                <Link href={"/" + userType +  "/customer-report"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -232,7 +246,7 @@ const Sidebar = (props) => {
                         <h6 className="submenu-hdr">- Settings</h6>
                         <ul className={sidebarStyle.sidebarNavUl}>
                             <li className={props.activeState === "settings" ? sidebarStyle.active : ""}>
-                                <Link href={"/"+ userType + "/settings"}>
+                                <Link href={"/" + userType +  "/settings"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                                          strokeLinecap="round" strokeLinejoin="round"
@@ -250,6 +264,8 @@ const Sidebar = (props) => {
                     </li>
                 </ul>
             </div>
+                )
+            }
         </>
     );
 }

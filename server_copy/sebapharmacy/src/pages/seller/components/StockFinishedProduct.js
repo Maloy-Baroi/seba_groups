@@ -79,7 +79,7 @@ const StockFinishedProduct = () => {
                                         </td>
                                     </tr>
                                 ))
-                                : ""
+                                : <tr></tr>
                             }
                             </tbody>
                         </table>

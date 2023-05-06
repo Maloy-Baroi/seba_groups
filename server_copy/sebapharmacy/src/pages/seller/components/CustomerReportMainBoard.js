@@ -89,7 +89,7 @@ const CustomerReportMainBoard = () => {
                                                         <td data-label={"Total Purchased"}>{customer.get_total_price}</td>
                                                     </tr>
                                                 ))
-                                                : ""
+                                                : <tr></tr>
                                             }
                                             </tbody>
                                         </table>

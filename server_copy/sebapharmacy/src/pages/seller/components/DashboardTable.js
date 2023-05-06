@@ -56,7 +56,7 @@ const DashboardTable = () => {
                                     <td data-label="Expired">{item.expiry_date}</td>
                                 </tr>
                             ))
-                            : ""
+                            : <tr></tr>
                         }
                         </tbody>
                     </table>

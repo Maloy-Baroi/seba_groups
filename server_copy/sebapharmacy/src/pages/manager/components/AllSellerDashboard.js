@@ -25,7 +25,7 @@ const AllSellerDashboard = () => {
     const searchOption = (event) => {
         const searchValue = event.target.value;
         setSearchItem(searchValue);
-        if (searchValue.length > 0) {
+        if (searchValue && searchValue.length > 0) {
             const filteredSeller = sellerList.filter(cat => cat.name.toLowerCase().includes(searchValue.toLowerCase()));
             setSellerList(filteredSeller);
         }
@@ -163,7 +163,7 @@ const AllSellerDashboard = () => {
                                             </thead>
                                             <tbody>
                                             {
-                                                sellerList.length > 0 ?
+                                                sellerList && sellerList.length > 0 ?
                                                 sellerList.map((item, index) => (
                                                     <tr key={item.id}>
                                                         <td data-label="S.N">{index+1}</td>

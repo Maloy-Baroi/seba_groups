@@ -57,9 +57,6 @@ const login = () => {
         )
             .then(response => response.json())
             .then(result => {
-                console.log(result['access'])
-                console.log(result['group'])
-
                 if ((result['access'] != null)) {
                     if (result['group'] === 'seller') {
                         localStorage.setItem("access_token", result['access'])
@@ -70,7 +67,7 @@ const login = () => {
                         localStorage.setItem("access_token", result['access'])
                         localStorage.setItem("group", result['group'])
                         localStorage.setItem("auth", true)
-                        navigator.push('/manager/dashboard')
+                        navigator.push('manager/dashboard')
                     }
                 }
             })
@@ -100,7 +97,7 @@ const login = () => {
                                     <div className={loginStyle.formInputContainer}>
                                         <label>Email</label>
                                         <input onBlur={isValidEmail} type={"email"} value={email} onChange={e => setEmail(e.target.value)}
-                                               placeholder={"Enter your email address"}/>
+                                               placeholder={"Enter your email address"} required={true} />
                                         <i id={"emailID"} className={"fa fa-envelope-open"}></i>
                                     </div>
 
@@ -108,7 +105,7 @@ const login = () => {
                                         <label>Password</label>
                                         <input type={"password"} value={password}
                                                onChange={e => setPassword(e.target.value)}
-                                               placeholder={"Enter your password"} id={"password"}/>
+                                               placeholder={"Enter your password"} id={"password"} required={true} />
                                         <i className={"fa fa-eye"} onClick={showPassword} id={"showIcon"}></i>
                                     </div>
 
@@ -129,7 +126,7 @@ const login = () => {
                                     <div className={loginStyle.formInputContainer}>
                                         <div className={loginStyle.homeButtonContainer}>
                                             <button className={"btn " + loginStyle.homeButton}
-                                                    onClick={() => navigator.push('/')}>
+                                                    onClick={() => navigator.push('')}>
                                                 Back to Home
                                             </button>
                                         </div>
